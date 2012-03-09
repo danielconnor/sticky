@@ -143,10 +143,30 @@ UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
 
 UI.TimelineControl.prototype.addAtTime = function(time) {
 
-	for(var i = 0, k = this.keyFrames, il = k.length; i < il && time >= k[i].time; i++)
-	;
+	var k = this.keyFrames,
+		il = k.length,
+		min = 0,
+		max = il - 1,
+		i,
+		last = 0;
 
-	this.addAtPosition(new UI.KeyFrameControl(this.curInterval.getInterval(time), time), i);
+
+    while ( 1 ) {
+        i = Math.floor((min + max) / 2);
+        if (last == i) break;
+        last = i;
+        if ( this.keyFrames[i].time < time) {
+            min = i;
+        }
+        else if ( this.keyFrames[i].time > time) {
+            max = i;
+        }
+        else {
+            break;
+        }
+    } 
+
+	this.addAtPosition(new UI.KeyFrameControl(this.curInterval.getInterval(time), time), i + 1);
 };
 
 
