@@ -42,7 +42,7 @@ UI.TimelineControl = function(animatable, duration) {
 		else if(!timeline._changeAnimatable) {
 			//if it wasnt updated by the timeline
 			//i.e. by a Voodoo, we create a new KeyFrame at the current time
-			timeline.addKeyFrame(timeline._current);
+			timeline.addAtTime(timeline._current);
 		}
 		timeline._changeAnimatable = false;
 	});
@@ -70,7 +70,7 @@ Object.defineProperty(UI.TimelineControl.prototype, "current", {
 				this.animatable.props = this.active._props;
 			}
 			else if(this.curInterval && this.next) {
-				this.animatable.props = this.curInterval.getInterval(current - this.prev.time);
+				this.animatable.props = this.curInterval.getInterval(current);
 			}
 			else {
 				console.log("hide");
@@ -123,10 +123,8 @@ UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
 		var interval = new CurveKeyFrameInterval(keyFrame, this.keyFrames[index], this.animatable.paper);
 
 		interval.addEventListener("change", function() {
-			if(timeline.prev) {
-				timeline._changeAnimatable = true;
-				timeline.animatable.props = timeline.curInterval.getInterval(timeline._current - timeline.prev.time);
-			}
+			timeline._changeAnimatable = true;
+			timeline.animatable.props = timeline.curInterval.getInterval(timeline._current);
 		});
 
 		if(this.intervals[index -1])
