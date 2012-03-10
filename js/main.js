@@ -12,7 +12,7 @@
 		height = window.innerHeight;
 	}, false);
 
-    storyboard.addObject(new Objects.C.Skeleton(paper, new Point(200,200)));
+	storyboard.addObject(new Objects.C.Skeleton(paper, new Point(200,200)));
 
-    document.body.appendChild(storyboard.element);
+	document.body.appendChild(storyboard.element);
 })();

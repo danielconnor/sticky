@@ -151,20 +151,20 @@ UI.TimelineControl.prototype.addAtTime = function(time) {
 		last = 0;
 
 
-    while ( 1 ) {
-        i = Math.floor((min + max) / 2);
-        if (last == i) break;
-        last = i;
-        if ( this.keyFrames[i].time < time) {
-            min = i;
-        }
-        else if ( this.keyFrames[i].time > time) {
-            max = i;
-        }
-        else {
-            break;
-        }
-    }
+	while ( 1 ) {
+		i = Math.floor((min + max) / 2);
+		if (last == i) break;
+		last = i;
+		if ( this.keyFrames[i].time < time) {
+			min = i;
+		}
+		else if ( this.keyFrames[i].time > time) {
+			max = i;
+		}
+		else {
+			break;
+		}
+	}
 
 	this.addAtPosition(new UI.KeyFrameControl(this.curInterval.getInterval(time), time), i + 1);
 };
