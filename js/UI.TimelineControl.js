@@ -164,7 +164,7 @@ UI.TimelineControl.prototype.addAtTime = function(time) {
         else {
             break;
         }
-    } 
+    }
 
 	this.addAtPosition(new UI.KeyFrameControl(this.curInterval.getInterval(time), time), i + 1);
 };

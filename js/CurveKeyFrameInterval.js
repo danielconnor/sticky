@@ -74,7 +74,7 @@ CurveKeyFrameInterval.prototype.update = function() {
 };
 
 CurveKeyFrameInterval.prototype.getInterval = function(time) {
-	var pos = this.element.getPointAtLength(time / this._next.time * this.totalLength);
+	var pos = this.element.getPointAtLength((time - this._prev.time) / (this._next.time - this._prev.time) * this.totalLength);
 
 	return {
 		position: new Point(pos.x, pos.y)
