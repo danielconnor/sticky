@@ -59,5 +59,13 @@ Object.defineProperty(Voodoo.prototype, "size", {
 
 		this._size = s;
 	}
-})
+});
+Object.defineProperty(Voodoo.prototype, "color", {
+	get: function() {
+		return this.point.attr("fill");
+	},
+	set: function(color) {
+		this.point.attr("fill", color);
+	}
+});
 
