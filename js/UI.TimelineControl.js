@@ -54,30 +54,34 @@ UI.TimelineControl = function(animatable, duration) {
 UI.TimelineControl.prototype = new UI.Control();
 UI.TimelineControl.prototype.constructor = UI.TimelineControl();
 
+UI.TimelineControl.prototype.setCurrent = function(current) {
+	this._current = current;
+
+	this.setActiveKeyFrame();
+
+	this._changeAnimatable = true;
+
+	if(this.active) {
+		this.animatable.props = this.active._props;
+	}
+	else if(this.curInterval && this.next) {
+		this.animatable.props = this.curInterval.getInterval(current);
+	}
+	else {
+		console.log("hide");
+		//TODO: hide - the animatable is no longer in scope on the timeline
+	}
+};
+
 Object.defineProperty(UI.TimelineControl.prototype, "current", {
 	get: function() {
 		return this._current;
 	},
 	set: function(current) {
 		if(this._current != current) {
-			this._current = current;
-
-			this.setActiveKeyFrame();
-
-			this._changeAnimatable = true;
-
-			if(this.active) {
-				this.animatable.props = this.active._props;
-			}
-			else if(this.curInterval && this.next) {
-				this.animatable.props = this.curInterval.getInterval(current);
-			}
-			else {
-				console.log("hide");
-				//TODO: hide - the animatable is no longer in scope on the timeline
-			}
-
-			this.emit("currentchange",[]);
+			this.setCurrent(current);
+			
+			this.emit("currentchange",[current]);
 		}
 	}
 });

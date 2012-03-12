@@ -19,12 +19,16 @@ UI.Progress.prototype.onchange = function() {
 	this.current = parseInt(this.element.value, 10);
 };
 
+UI.Progress.prototype.setCurrent = function(current) {
+	this.element.value = this._current = current;	
+};
+
 Object.defineProperty(UI.Progress.prototype, "current", {
 	get: function() {
 		return this._current;
 	},
 	set: function(current) {
-		this.element.value = this._current = current;
+		this.setCurrent(current);
 		this.emit("currentchange", []);
 	}
 });

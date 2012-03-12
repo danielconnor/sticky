@@ -16,7 +16,7 @@ function StoryBoard(screen) {
 	this.progress = new UI.Progress(this._length);
 
 	this.progress.addEventListener("currentchange", function() {
-		storyboard.objects[0].timeline.current = this._current;
+		storyboard.keyFrames.children[0].setCurrent(this.current);
 	});
 
 	this.controls.append(this.progress);
@@ -29,9 +29,16 @@ StoryBoard.prototype = new UI.Control();
 StoryBoard.prototype.constructor = StoryBoard;
 
 StoryBoard.prototype.addObject = function(obj) {
+	var storyboard = this;
+
 	obj.length = this._length;
 
 	this.objects.push(obj);
+
+	obj.timelineCollection.addEventListener("currentchange", function(current) {
+		storyboard.progress.setCurrent(current);
+	});
+
 	this.keyFrames.append(obj.timelineCollection);
 };
 
