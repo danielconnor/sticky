@@ -43,6 +43,8 @@ function CurveKeyFrameInterval(prev, next, paper) {
 		new Voodoo(this.controlPoints[1], paper)
 	];
 
+	this.voodoos[0].color = this.voodoos[1].color = "#007800";
+
 
 	this.controlPoints[0].addEventListener("change", handleUpdate);
 	this.controlPoints[1].addEventListener("change", handleUpdate);
