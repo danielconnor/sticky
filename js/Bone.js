@@ -2,7 +2,9 @@
 * description: 
 * events: anglechange, lengthchange, change
 */
-function Bone(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degrees*/, length/*pixels*/) {
+function Bone(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degrees*/, length/*pixels*/, element/*Raphael Element*/) {
+	if(!paper) return;
+	
 	BoneCollection.call(this, paper, null);
 	var bone = this;
 
@@ -11,13 +13,12 @@ function Bone(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degr
 	this.parent = parent;
 
 	this.attrs = {
-		path: "",
 		stroke: "#000",
 		fill: "none",
 		"stroke-width": "2.5px"
 	};
 
-	this.element = paper.path();
+	this.element = element || paper.path();
 
 
 	this.element.click(function(e) {

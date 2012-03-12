@@ -24,16 +24,19 @@ Objects.C.Skeleton.layout =  {
 	bones: [
 	{
 		//body
+		type: "bone",
 		length: 40,
 		angle: 90,
 		bones: [
 			{
 				//right thigh
+				type: "bone",
 				length: 20,
 				angle: 120,
 				bones: [
 					{
 						//right calf
+						type: "bone",
 						length: 20,
 						angle: 120,
 						bones: []
@@ -42,11 +45,13 @@ Objects.C.Skeleton.layout =  {
 			},
 			{
 				//left thigh
+				type: "bone",
 				length: 20,
 				angle: 60,
 				bones: [
 					{
 						//left calf
+						type: "bone",
 						length: 20,
 						angle: 60,
 						bones: []
@@ -57,11 +62,13 @@ Objects.C.Skeleton.layout =  {
 	},
 	{
 		//right upperarm
+		type: "bone",
 		length: 20,
 		angle: 120,
 		bones: [
 			{
 				//right forearm
+				type: "bone",
 				length: 20,
 				angle: 120,
 				bones: []
@@ -70,11 +77,13 @@ Objects.C.Skeleton.layout =  {
 	},
 	{
 		//left upperarm
+		type: "bone",
 		length: 20,
 		angle: 60,
 		bones: [
 			{
 				//left forearm
+				type: "bone",
 				length: 20,
 				angle: 60,
 				bones: []
@@ -83,7 +92,8 @@ Objects.C.Skeleton.layout =  {
 	},
 	{
 		//head
-		length: 22,
+		type: "skull",
+		length: 20,
 		angle: -90,
 		bones: []
 	}

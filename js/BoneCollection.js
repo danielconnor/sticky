@@ -20,8 +20,15 @@ BoneCollection.prototype.addBone = function() {
 		if(arguments[1] instanceof Function) arguments[2](bone);
 	}
 	else if(typeof arguments[0] === "number" && typeof arguments[1] === "number") {
-		bone = new Bone(this.paper, this, arguments[0], arguments[1]);
-		if(arguments[2] instanceof Function) arguments[2](bone);
+		switch(arguments[2]){
+			case "bone": 
+					bone = new Bone(this.paper, this, arguments[0], arguments[1]);
+				break;
+			case "skull":
+					bone = new Skull(this.paper, this, arguments[0], arguments[1]);
+				break;
+		}
+		if(arguments[3] instanceof Function) arguments[3](bone);
 	}
 	this.bones.push(bone);
 
@@ -49,7 +56,7 @@ BoneCollection.prototype.addBones = function(layout, callback) {
 		bones = layout.bones;
 	for (var i = 0; i < numBones; i++) {
 		var b = bones[i];
-		this.addBone(b.angle, b.length, callback).addBones(b, callback);
+		this.addBone(b.angle, b.length, b.type, callback).addBones(b, callback);
 	}
 
 };

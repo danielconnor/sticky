@@ -1,7 +1,23 @@
-function Skull(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degrees*/, length/*pixels*/) {
-	Bone.call(this,paper,parent,angle,length);
+function Skull(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degrees*/, radius/*pixels*/) {
+	Bone.call(this,paper,parent,angle,radius, paper.circle());
+
+	this.attrs = {
+		stroke: "#000",
+		fill: "none",
+		"stroke-width": "2px"
+	};
+
+	this.update();
 }
 
-Skull.prototype.update = function() {
-	
+Skull.prototype = new Bone();
+Skull.prototype.constructor = Skull;
+
+Skull.prototype.draw = function() {
+	this.element.attr({
+		"cx": this._position.x,
+		"cy": this._position.y,
+		"r" : this._length
+	});
+	this.element.attr(this.attrs);
 };
