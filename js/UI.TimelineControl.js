@@ -124,7 +124,13 @@ UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
 
 		interval.addEventListener("change", function() {
 			timeline._changeAnimatable = true;
-			timeline.animatable.props = timeline.curInterval.getInterval(timeline._current);
+
+			if(timeline.active) {
+				timeline.animatable.props = timeline.active._props;
+			}
+			else if(timeline.curInterval) {
+				timeline.animatable.props = timeline.curInterval.getInterval(timeline._current);
+			}
 		});
 
 		if(this.intervals[index -1])
