@@ -9,6 +9,13 @@ Point.prototype.add = function(x,y) {
 	}
 	return new Point(this.x + x, this.y + y);
 };
+Point.prototype.subtract = function(x,y) {
+	if(x instanceof Point) {
+		y = x.y;
+		x = x.x
+	}
+	return new Point(this.x - x, this.y - y);
+};
 Point.prototype.clone = function() {
 	return new Point(this.x, this.y);
 };
