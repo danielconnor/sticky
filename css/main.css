@@ -80,6 +80,7 @@ body, html {
 		border-radius: 2.5px;
 		height: 20px;
 		background-color: #000;
+		margin-right: -3px;
 	}
 
 .control.keyframes {
