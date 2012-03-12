@@ -1,11 +1,7 @@
 function Skull(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degrees*/, radius/*pixels*/) {
 	Bone.call(this,paper,parent,angle,radius, paper.circle());
 
-	this.attrs = {
-		stroke: "#000",
-		fill: "none",
-		"stroke-width": "2px"
-	};
+	this.attrs["stroke-width"] = "2px";
 
 	this.update();
 }
