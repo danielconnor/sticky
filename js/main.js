@@ -4,8 +4,7 @@
 		height = window.innerHeight,
 		screen = document.createElement("div"),
 		paper = Raphael(screen, width, height),
-		controls = new UI.Control("div"),
-		storyboard = new StoryBoard(paper, controls);
+		storyboard = new StoryBoard(paper);
 
 	window.addEventListener("resize", function() {
 		width = window.innerWidth;
