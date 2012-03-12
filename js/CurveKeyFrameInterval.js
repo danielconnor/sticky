@@ -18,7 +18,7 @@ function CurveKeyFrameInterval(prev, next, paper) {
 
 	function handleUpdate() {
 		interval.controlPointOffsets[0] = interval.prev._props.position.subtract(interval.controlPoints[0]._position);
-		interval.controlPointOffsets[1] = interval.prev._props.position.subtract(interval.controlPoints[1]._position);
+		interval.controlPointOffsets[1] = interval.next._props.position.subtract(interval.controlPoints[1]._position);
 		interval.update();
 		interval.emit("change",[]);
 	}
@@ -65,7 +65,7 @@ CurveKeyFrameInterval.prototype.update = function() {
 	var cp = this.controlPoints;
 
 	this.controlPoints[0].position = this.prev._props.position.subtract(this.controlPointOffsets[0]);
-	this.controlPoints[1].position = this.prev._props.position.subtract(this.controlPointOffsets[1]);
+	this.controlPoints[1].position = this.next._props.position.subtract(this.controlPointOffsets[1]);
 
 	this.controlConnections[0].attr({
 		path: "M" + this._prev._props.position.toString() + "L" + cp[0]._position.toString()
