@@ -27,18 +27,11 @@ Object.defineProperty(KeyFrameInterval.prototype, "prev", {
 });
 
 KeyFrameInterval.prototype.getInterval = function(time) {
-	var next = this._next,
-		prev = this._prev,
-		t1 = next.time
-		t2 = prev.time
-		diff = t1 - t2,
-		f = time / diff,
-		interval = {};
+	var f = (time - this._prev.time) / (this._next.time - this._prev.time);
 
-	for(var i in next.props) {
-		var d = next.props[i] - prev.props[i];
-		interval[i] = d * f;
-	}
-	return interval;
-}
+	return this._prev.prop + (this._next.prop - this._prev.prop) * f;
+};
 
+KeyFrameInterval.prototype.update = function() {
+
+};

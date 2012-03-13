@@ -1,4 +1,4 @@
-UI.KeyFrameControl = function(properties, time, max) {
+UI.KeyFrameControl = function(property, time, max) {
 	UI.Control.call(this, "input", "keyframe");
 
 	if(!arguments[0]) return;
@@ -9,7 +9,7 @@ UI.KeyFrameControl = function(properties, time, max) {
 	this.element.setAttribute("step", 2);
 
 	this.position = null;
-	this._props = properties || {};
+	this._prop = property || {};
 	this.element.value = this._time = time;
 
 	this.handle("change");
@@ -27,13 +27,13 @@ UI.KeyFrameControl.prototype.onclick = function(e) {
 	this.emit("select", [e]);
 };
 
-Object.defineProperty(UI.KeyFrameControl.prototype, "props", {
+Object.defineProperty(UI.KeyFrameControl.prototype, "prop", {
 	get: function() {
-		return this._props;
+		return this._prop;
 	},
-	set: function(properties) {
+	set: function(property) {
 
-		this._props = properties;
+		this._prop = property;
 
 		this.emit("propchange", []);
 	}

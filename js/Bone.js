@@ -4,7 +4,7 @@
 */
 function Bone(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degrees*/, length/*pixels*/, element/*Raphael Element*/) {
 	if(!paper) return;
-	
+
 	BoneCollection.call(this, paper, null);
 	var bone = this;
 
@@ -33,6 +33,8 @@ Bone.prototype = new BoneCollection();
 Bone.prototype.constructor = Bone;
 Bone.prototype.supr = BoneCollection.prototype;
 
+Bone.prototype.intervalConstructor = KeyFrameInterval;
+
 Object.defineProperty(Bone.prototype, "position", {
 	set: function(pos) {
 		this.angle = pos.angleBetween(this.parent._position) * 180 / Math.PI;
@@ -46,7 +48,7 @@ Object.defineProperty(Bone.prototype,"angle", {
 	set: function(a) {
 		if(this._angle != a) {
 			this._angle = a;
-
+			this.emit("anglechange", []);
 			this.update();
 		}
 	}
@@ -58,22 +60,8 @@ Object.defineProperty(Bone.prototype,"length", {
 	set: function(l) {
 		if(this._length != l) {
 			this._length = l;
-
+			this.emit("lengthchange", []);
 			this.update();
-		}
-	}
-});
-
-Object.defineProperty(Bone.prototype, "props", {
-	get: function() {
-		return {
-			angle: this._angle
-		};
-	},
-	set: function(properties) {
-		var angle;
-		if(angle = properties.angle) {
-			this.angle = angle;
 		}
 	}
 });
@@ -97,6 +85,7 @@ Bone.prototype.update = function() {
 Bone.prototype.draw = function() {
 	this.element.attr(this.attrs);
 };
+
 
 Bone.prototype.handleClick = function(e) {
 

@@ -4,7 +4,7 @@ Objects.Basic = function(obj) {
 
 	this.obj = obj;
 	this.voodoo = new Voodoo(obj, obj.paper);
-	this.timeline = new UI.TimelineControl(obj, 500);
+	this.timeline = new UI.TimelineControl(obj, "position", 500);
 	this.timelineCollection = new UI.TimelineCollectionControl();
 	this.timelineCollection.append(this.timeline);
 };

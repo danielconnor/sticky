@@ -17,25 +17,21 @@ Objects.C.Skeleton.create = function(paper, position, callback) {
 
 Objects.C.Skeleton.layout =  {
 	type: "Skeleton",
-	basePt: {
-		x: 75,
-		y: 50
-	},
 	bones: [
 	{
-		//body
+		name: "body",
 		type: "bone",
 		length: 40,
 		angle: 90,
 		bones: [
 			{
-				//right thigh
+				name: "right thigh",
 				type: "bone",
 				length: 20,
 				angle: 120,
 				bones: [
 					{
-						//right calf
+						name: "right calf",
 						type: "bone",
 						length: 20,
 						angle: 120,
@@ -44,13 +40,13 @@ Objects.C.Skeleton.layout =  {
 				]
 			},
 			{
-				//left thigh
+				name: "left thigh",
 				type: "bone",
 				length: 20,
 				angle: 60,
 				bones: [
 					{
-						//left calf
+						name: "right thigh",
 						type: "bone",
 						length: 20,
 						angle: 60,
@@ -61,13 +57,13 @@ Objects.C.Skeleton.layout =  {
 		]
 	},
 	{
-		//right upperarm
+		name: "right upperarm",
 		type: "bone",
 		length: 20,
 		angle: 120,
 		bones: [
 			{
-				//right forearm
+				name: "right forearm",
 				type: "bone",
 				length: 20,
 				angle: 120,
@@ -76,13 +72,13 @@ Objects.C.Skeleton.layout =  {
 		]
 	},
 	{
-		//left upperarm
+		name: "left upperarm",
 		type: "bone",
 		length: 20,
 		angle: 60,
 		bones: [
 			{
-				//left forearm
+				name: "left forearm",
 				type: "bone",
 				length: 20,
 				angle: 60,
@@ -91,7 +87,7 @@ Objects.C.Skeleton.layout =  {
 		]
 	},
 	{
-		//head
+		name: "head",
 		type: "skull",
 		length: 20,
 		angle: -90,

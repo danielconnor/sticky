@@ -17,16 +17,4 @@ function AnimatableObject(paper, position /*Point*/) {
 AnimatableObject.prototype = new ControlPoint();
 AnimatableObject.prototype.constructor = AnimatableObject;
 
-Object.defineProperty(AnimatableObject.prototype, "props", {
-	get: function() {
-		return {
-			position: this._position.clone()
-		};
-	},
-	set: function(properties) {
-		var position;
-		if(position = properties.position) {
-			this.position = position;			
-		}
-	}
-});
+AnimatableObject.prototype.intervalConstructor = CurveKeyFrameInterval;

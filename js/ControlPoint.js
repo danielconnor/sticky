@@ -10,10 +10,14 @@ ControlPoint.prototype.setPosition = function(pos) {
 	if(this._position.x != pos.x || this._position.y != pos.y) {
 		this._position = pos;
 
+		this.emit("positionchange", []);
 		this.emit("change", []);
 	}
 };
 
 Object.defineProperty(ControlPoint.prototype, "position", {
-	set: ControlPoint.prototype.setPosition
+	set: ControlPoint.prototype.setPosition,
+	get: function() {
+		return this._position;
+	}
 });

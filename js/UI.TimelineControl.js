@@ -1,4 +1,4 @@
-UI.TimelineControl = function(animatable, duration) {
+UI.TimelineControl = function(animatable, property, duration) {
 	UI.Control.call(this,"div", "timeline");
 	if(!arguments[0]) return;
 
@@ -8,6 +8,7 @@ UI.TimelineControl = function(animatable, duration) {
 	this.intervals = [];
 
 	this.animatable = animatable;
+	this.property = property;
 	this._current = 0;
 
 	timeline.handleSelect = function() {
@@ -27,14 +28,14 @@ UI.TimelineControl = function(animatable, duration) {
 	};
 
 
-	this.addAtPosition(new UI.KeyFrameControl(animatable.props, duration), 0);
-	this.addAtPosition(new UI.KeyFrameControl(animatable.props, this._current), 0);
+	this.addAtPosition(new UI.KeyFrameControl(animatable[property], duration), 0);
+	this.addAtPosition(new UI.KeyFrameControl(animatable[property], this._current), 0);
 
 	this._changeAnimatable = false;
 
-	animatable.addEventListener("change", function(e) {
+	animatable.addEventListener(property + "change", function(e) {
 		if(timeline.active) {
-			timeline.active._props = this.props;
+			timeline.active._prop = this[timeline.property];
 			
 			timeline.curInterval && timeline.curInterval.update();
 			timeline.prevInterval && timeline.prevInterval.update();
@@ -46,7 +47,6 @@ UI.TimelineControl = function(animatable, duration) {
 		}
 		timeline._changeAnimatable = false;
 	});
-
 };
 
 
@@ -62,13 +62,12 @@ UI.TimelineControl.prototype.setCurrent = function(current) {
 	this._changeAnimatable = true;
 
 	if(this.active) {
-		this.animatable.props = this.active._props;
+		this.animatable[this.property] = this.active._prop;
 	}
 	else if(this.curInterval && this.next) {
-		this.animatable.props = this.curInterval.getInterval(current);
+		this.animatable[this.property] = this.curInterval.getInterval(current);
 	}
 	else {
-		console.log("hide");
 		//TODO: hide - the animatable is no longer in scope on the timeline
 	}
 };
@@ -80,7 +79,7 @@ Object.defineProperty(UI.TimelineControl.prototype, "current", {
 	set: function(current) {
 		if(this._current != current) {
 			this.setCurrent(current);
-			
+
 			this.emit("currentchange",[current]);
 		}
 	}
@@ -124,16 +123,16 @@ UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
 	keyFrame.addEventListener("timechange", this.handleTimeChange);
 
 	if(this.keyFrames.length) {
-		var interval = new CurveKeyFrameInterval(keyFrame, this.keyFrames[index], this.animatable.paper);
+		var interval = new this.animatable.intervalConstructor(keyFrame, this.keyFrames[index], this.animatable.paper);
 
 		interval.addEventListener("change", function() {
 			timeline._changeAnimatable = true;
 
 			if(timeline.active) {
-				timeline.animatable.props = timeline.active._props;
+				timeline.animatable[timeline.property] = timeline.active._prop;
 			}
 			else if(timeline.curInterval) {
-				timeline.animatable.props = timeline.curInterval.getInterval(timeline._current);
+				timeline.animatable[timeline.property] = timeline.curInterval.getInterval(timeline._current);
 			}
 		});
 

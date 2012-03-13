@@ -17,15 +17,15 @@ function CurveKeyFrameInterval(prev, next, paper) {
 	};
 
 	function handleUpdate() {
-		interval.controlPointOffsets[0] = interval.prev._props.position.subtract(interval.controlPoints[0]._position);
-		interval.controlPointOffsets[1] = interval.next._props.position.subtract(interval.controlPoints[1]._position);
+		interval.controlPointOffsets[0] = interval.prev._prop.subtract(interval.controlPoints[0]._position);
+		interval.controlPointOffsets[1] = interval.next._prop.subtract(interval.controlPoints[1]._position);
 		interval.update();
 		interval.emit("change",[]);
 	}
 
 	this.controlPoints = [
-		new ControlPoint(prev._props.position), 
-		new ControlPoint(next._props.position)
+		new ControlPoint(prev._prop), 
+		new ControlPoint(next._prop)
 	];
 	this.controlPointOffsets = [
 		new Point(0,0),
@@ -66,18 +66,18 @@ CurveKeyFrameInterval.prototype.draw = function() {
 CurveKeyFrameInterval.prototype.update = function() {
 	var cp = this.controlPoints;
 
-	this.controlPoints[0].position = this.prev._props.position.subtract(this.controlPointOffsets[0]);
-	this.controlPoints[1].position = this.next._props.position.subtract(this.controlPointOffsets[1]);
+	this.controlPoints[0].position = this.prev._prop.subtract(this.controlPointOffsets[0]);
+	this.controlPoints[1].position = this.next._prop.subtract(this.controlPointOffsets[1]);
 
 	this.controlConnections[0].attr({
-		path: "M" + this._prev._props.position.toString() + "L" + cp[0]._position.toString()
+		path: "M" + this._prev._prop.toString() + "L" + cp[0]._position.toString()
 	});
 	this.controlConnections[1].attr({
-		path: "M" + this._next._props.position.toString() + "L" + cp[1]._position.toString()
+		path: "M" + this._next._prop.toString() + "L" + cp[1]._position.toString()
 	});
 
-	this.attr.path = "M" + this._prev._props.position.toString() + 
-		"C" + cp[0]._position.mirror(this._prev._props.position).toString() + " " + cp[1]._position.mirror(this._next._props.position).toString() + " " + this._next._props.position.toString();
+	this.attr.path = "M" + this._prev._prop.toString() + 
+		"C" + cp[0]._position.mirror(this._prev._prop).toString() + " " + cp[1]._position.mirror(this._next._prop).toString() + " " + this._next._prop.toString();
 
 	this.draw();
 
@@ -87,9 +87,7 @@ CurveKeyFrameInterval.prototype.update = function() {
 CurveKeyFrameInterval.prototype.getInterval = function(time) {
 	var pos = this.element.getPointAtLength((time - this._prev.time) / (this._next.time - this._prev.time) * this.totalLength);
 
-	return {
-		position: new Point(pos.x, pos.y)
-	};
+	return new Point(pos.x, pos.y);
 };
 
 CurveKeyFrameInterval.prototype.remove = function() {

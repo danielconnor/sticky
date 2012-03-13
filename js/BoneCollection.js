@@ -48,7 +48,10 @@ BoneCollection.prototype.setPosition = function(pos) {
 }
 
 Object.defineProperty(BoneCollection.prototype, "position", {
-	set: BoneCollection.prototype.setPosition
+	set: BoneCollection.prototype.setPosition,
+	get: function() {
+		return this._position;
+	}
 });
 
 BoneCollection.prototype.addBones = function(layout, callback) {
