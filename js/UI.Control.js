@@ -27,5 +27,37 @@ UI.Control.prototype.handle = function(eventName) {
 	var control = this;
 	this.element.addEventListener(eventName, function(e){
 		control["on" + eventName](e);
+		control.emit(eventName, [e]);
 	}, false);
 };
+
+Object.defineProperty(UI.Control.prototype, "left", {
+	get: function() {
+		var total = 0;
+		for (var element = this.element; element; element = element.offsetParent) {
+			total += element.offsetLeft;
+			if (this !== element)
+				total += element.clientLeft - element.scrollLeft;
+		}
+		return total;
+	},
+	set: function(left) {
+		this.element.style.left = left + "px";
+	}
+});
+
+
+Object.defineProperty(UI.Control.prototype, "top", {
+	get: function() {
+		var total = 0;
+		for (var element = this.element; element; element = element.offsetParent) {
+			total += element.offsetTop 
+			if (this !== element)
+				total += element.clientTop - element.scrollTop;
+		}
+		return total;
+	},
+	set: function(top) {
+		this.element.style.top = top + "px";
+	}
+});
