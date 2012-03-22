@@ -89,7 +89,6 @@ body, html {
 	top: 20px;
 	bottom: 0;
 	display: block;
-	pointer-events: none;
 }
 
 .hidden {

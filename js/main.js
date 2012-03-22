@@ -14,9 +14,5 @@
 
 	storyboard.addObject(new Objects.C.Skeleton(paper, new Point(200,200)));
 
-	slider = new UI.RangeControl();
-
-	document.body.appendChild(slider.element);
-
-	//document.body.appendChild(storyboard.element);
+	document.body.appendChild(storyboard.element);
 })();

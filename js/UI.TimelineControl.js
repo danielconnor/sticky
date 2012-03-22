@@ -1,5 +1,5 @@
-UI.TimelineControl = function(animatable, property, duration) {
-	UI.Control.call(this,"div", "timeline");
+UI.TimelineControl = function(animatable, property, start, end) {
+	UI.MultiRangeControl.call(this, end, start);
 	if(!arguments[0]) return;
 
 	var timeline = this;
@@ -9,7 +9,7 @@ UI.TimelineControl = function(animatable, property, duration) {
 
 	this.animatable = animatable;
 	this.property = property;
-	this._current = 0;
+	this._current = start;
 
 	timeline.handleSelect = function() {
 		timeline.selectKeyFrame(this);
@@ -28,8 +28,8 @@ UI.TimelineControl = function(animatable, property, duration) {
 	};
 
 
-	this.addAtPosition(new UI.KeyFrameControl(animatable[property], duration), 0);
-	this.addAtPosition(new UI.KeyFrameControl(animatable[property], this._current), 0);
+	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property],end), 0);
+	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property], this._current), 0);
 
 	this._changeAnimatable = false;
 
@@ -49,10 +49,8 @@ UI.TimelineControl = function(animatable, property, duration) {
 	});
 };
 
-
-
-UI.TimelineControl.prototype = new UI.Control();
-UI.TimelineControl.prototype.constructor = UI.TimelineControl();
+UI.TimelineControl.prototype = new UI.MultiRangeControl();
+UI.TimelineControl.prototype.constructor = UI.TimelineControl;
 
 UI.TimelineControl.prototype.setCurrent = function(current) {
 	this._current = current;
@@ -93,7 +91,7 @@ UI.TimelineControl.prototype.setActiveKeyFrame = function() {
 	this.prevInterval = null;
 	this.curInterval = null;
 
-	if(this._current >= this.keyFrames[0]._time && this._current <= this.keyFrames[this.keyFrames.length - 1]._time) {
+	if(this._current >= this.keyFrames[0].time && this._current <= this.keyFrames[this.keyFrames.length - 1].time) {
 		for(var i = 0, k = this.keyFrames, il = k.length; i < il; i++) {
 			if(k[i].time === this._current) {
 				this.active = k[i];
@@ -175,7 +173,7 @@ UI.TimelineControl.prototype.addAtTime = function(time) {
 		}
 	}
 
-	this.addAtPosition(new UI.KeyFrameControl(this.curInterval.getInterval(time), time), i + 1);
+	this.addAtPosition(new UI.KeyFrameControl(this, this.curInterval.getInterval(time), time), i + 1);
 };
 
 

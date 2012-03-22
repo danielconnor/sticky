@@ -4,8 +4,8 @@ function StoryBoard(screen) {
 
 	this.objects = [];
 	this.screen = screen;
-	this.screen.canvas.parentElement.id = "screen";
-	this.element.appendChild(this.screen.canvas.parentElement);
+	this.screen.canvas.parentNode.id = "screen";
+	this.element.appendChild(this.screen.canvas.parentNode);
 
 	this.controls = new UI.Control("div","");
 	this.controls.element.id = "controls";

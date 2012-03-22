@@ -1,27 +1,22 @@
-UI.KeyFrameControl = function(property, time, max) {
-	UI.Control.call(this, "input", "keyframe");
+UI.KeyFrameControl = function(parent, property, time) {
+	UI.RangeSliderControl.call(this, parent);
 
 	if(!arguments[0]) return;
 
-	this.element.setAttribute("type", "range");
-	this.element.setAttribute("min", 0);
-	this.element.setAttribute("max", 1000);
-	this.element.setAttribute("step", 2);
-
 	this.position = null;
 	this._prop = property || {};
-	this.element.value = this._time = time;
+    this.value = time;
 
-	this.handle("change");
+    this.addEventListener("change", function() {
+        this.emit("timechange");
+    });
+
 	this.handle("click");
 };
 
-UI.KeyFrameControl.prototype = new UI.Control();
-UI.KeyFrameControl.prototype.constructor = UI.KeyFrameControl();
+UI.KeyFrameControl.prototype = new UI.RangeSliderControl();
+UI.KeyFrameControl.prototype.constructor = UI.KeyFrameControl;
 
-UI.KeyFrameControl.prototype.onchange = function(e) {
-	this.time = parseInt(this.element.value, 10);
-};
 
 UI.KeyFrameControl.prototype.onclick = function(e) {
 	this.emit("select", [e]);
@@ -41,14 +36,12 @@ Object.defineProperty(UI.KeyFrameControl.prototype, "prop", {
 
 Object.defineProperty(UI.KeyFrameControl.prototype, "time", {
 	get: function() {
-		return this._time;
+		return this._value;
 	},
 	set: function(time) {
 
-		this.element.value = this._time = time;
+		this.value = time;
 
-
-		this.emit("timechange", []);
 	}
 });
 

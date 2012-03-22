@@ -6,6 +6,7 @@ UI.Control = function(tagName, classes) {
 	this.children = [];
 	this.element = tagName instanceof Node ? tagName : document.createElement(tagName);
 	this.element.className = "control " + classes;
+    this.element._control = this;
 };
 
 UI.Control.prototype = new EventEmitter();
@@ -26,8 +27,8 @@ UI.Control.prototype.remove = function(control) {
 UI.Control.prototype.handle = function(eventName) {
 	var control = this;
 	this.element.addEventListener(eventName, function(e){
-		control["on" + eventName](e);
 		control.emit(eventName, [e]);
+        return control["on" + eventName](e);
 	}, false);
 };
 

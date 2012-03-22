@@ -31,7 +31,7 @@ function CurveKeyFrameInterval(prev, next, paper) {
 		new Point(0,0),
 		new Point(0,0)
 	];
-	
+
 
 	this.controlConnections = [
 		paper.path(""),
