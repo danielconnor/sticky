@@ -15,15 +15,15 @@ function StoryBoard(screen) {
 
 	this.progress = new UI.Progress(this._length);
 
-	this.progress.addEventListener("change", function() {
-		storyboard.keyFrames.children[0].setCurrent(this.value);
-	});
 
 	this.controls.append(this.progress);
 
 	this.keyFrames = new UI.Control("div",["keyframes"]);
 	this.controls.append(this.keyFrames);
 
+	this.progress.addEventListener("change", function() {
+		storyboard.keyFrames.children[0].setCurrent(this.value);
+	});
 }
 StoryBoard.prototype = new UI.Control();
 StoryBoard.prototype.constructor = StoryBoard;

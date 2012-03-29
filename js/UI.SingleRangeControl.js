@@ -21,6 +21,7 @@ UI.SingleRangeControl.prototype.constructor = UI.SingleRangeControl;
 UI.SingleRangeControl.prototype.supr = UI.RangeControl;
 
 UI.SingleRangeControl.prototype.onmousedown = function(e) {
+	this.slider.onmousedown(e);
 	this.slider.onmousemove(e, true);
 	return false;
 };
