@@ -1,5 +1,5 @@
 UI.Player = function() {
-	UI.Control.call(this, "input", "player");
+	UI.Control.call(this, "input", ["player"]);
 	this.timelines = [];
 };
 

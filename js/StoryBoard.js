@@ -1,5 +1,5 @@
 function StoryBoard(screen) {
-	UI.Control.call(this, "div", "storyboard");
+	UI.Control.call(this, "div", ["storyboard"]);
 	var storyboard = this;
 
 	this.objects = [];
@@ -15,13 +15,13 @@ function StoryBoard(screen) {
 
 	this.progress = new UI.Progress(this._length);
 
-	this.progress.addEventListener("currentchange", function() {
-		storyboard.keyFrames.children[0].setCurrent(this.current);
+	this.progress.addEventListener("change", function() {
+		storyboard.keyFrames.children[0].setCurrent(this.value);
 	});
 
 	this.controls.append(this.progress);
 
-	this.keyFrames = new UI.Control("div","keyframes");
+	this.keyFrames = new UI.Control("div",["keyframes"]);
 	this.controls.append(this.keyFrames);
 
 }
@@ -36,7 +36,7 @@ StoryBoard.prototype.addObject = function(obj) {
 	this.objects.push(obj);
 
 	obj.timelineCollection.addEventListener("currentchange", function(current) {
-		storyboard.progress.setCurrent(current);
+		storyboard.progress.value = current;
 	});
 
 	this.keyFrames.append(obj.timelineCollection);

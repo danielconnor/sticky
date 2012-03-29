@@ -1,13 +1,16 @@
-UI.RangeSliderControl = function(parent) {
-	UI.Control.call(this, "div", "range-slider-control");
+UI.RangeSliderControl = function(parent, enabled) {
+	UI.Control.call(this, "div", ["range-slider-control"]);
 
 	var slider = this;
 
 	this.dragging = false;
+	this.enabled = enabled !== undefined ? enabled : true;
 
-    this.parent = parent;
+	this.parent = parent;
 
 	this.handle("mousedown");
+	this.handle("dragstart");
+	this.handle("selectstart");
 
 	document.addEventListener("mousemove", function(e) {
 		slider.onmousemove(e);
@@ -15,9 +18,12 @@ UI.RangeSliderControl = function(parent) {
 	document.addEventListener("mouseup", function(e) {
 		slider.onmouseup(e);
 	});
+	document.addEventListener("selectstart", function(e) {
+		slider.onselectstart(e);
+	});
 
 
-    this._value = 0;
+	this._value = 0;
 }
 
 UI.RangeSliderControl.prototype = new UI.Control();
@@ -25,45 +31,61 @@ UI.RangeSliderControl.prototype.constructor = UI.RangeSliderControl;
 UI.RangeSliderControl.prototype.supr = UI.Control;
 
 UI.RangeSliderControl.prototype.onmousemove = function(e, parent) {
-	if(this.dragging || parent) {
-        var parent = this.parent,
-            width = parent.element.clientWidth
-            sliderOffset = this.element.clientWidth / 2,
-            left = e.pageX - parent.left,
-            min = parent.min,
-            max = parent.max;
+	//parent can be set to true when this funtion is called from a parent
+	if((this.dragging && this.enabled) || parent) {
+		var parent = this.parent,
+			offset = e.pageX - parent.left,
+			value = this.parent.valueAtOffset(offset);
 
-        this._value = min + ((left / width) * (max - min));
-        this.left = (left < 0 ? 0: (left > width ? width : left)) - sliderOffset;
-        
-        this.emit("change", [this]);
-        return false;
-    }
+		this._value = value;
+			
+		this.left = value / (parent.max - parent.min) * 100;
+
+		this.element.setAttribute("value", value.toFixed(2));
+
+		this.emit("change", [this]);
+		return false;
+	}
 };
 
 UI.RangeSliderControl.prototype.onmousedown = function(e) {
 	this.dragging = true;
-    return false;
 };
 
 
 UI.RangeSliderControl.prototype.onmouseup = function(e) {
 	this.dragging = false;
-    return false;
 };
 
+
+UI.RangeSliderControl.prototype.ondragstart = function(e) {
+	//prevent the browser beginning a drag event when we try to move the slider
+	e.stopPropagation();
+	e.preventDefault();
+	return false;
+}
+UI.RangeSliderControl.prototype.onselectstart = function(e) {
+	if(this.dragging) {
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
+	}
+}
+
 Object.defineProperty(UI.RangeSliderControl.prototype, "value", {
-    get: function() {
-        return this._value;
-    },
-    set: function(val) {
-        var parent = this.parent,
-            min = parent._min,
-            max = parent._max;
+	get: function() {
+		return this._value;
+	},
+	set: function(val) {
+		var parent = this.parent;
 
-        this._value = val < min ? min : val > max ? max : val;
-        this.left = ((this._value - min) / (max - min) * parent.element.clientWidth) - this.element.clientWidth / 2;
+		this._value = val = Math.min(Math.max(val, parent._min), parent._max);
 
-        this.emit("change", [this]);
-    }
+		//var offset = this.parent.offsetAtValue(val);
+
+		this.left = val / (parent.max - parent.min) * 100;//this.element.clientWidth / 2;
+		this.element.setAttribute("value", (Math.round(val * 100 ) / 100));
+
+		this.emit("change", [this]);
+	}
 });

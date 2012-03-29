@@ -35,3 +35,7 @@ KeyFrameInterval.prototype.getInterval = function(time) {
 KeyFrameInterval.prototype.update = function() {
 
 };
+
+KeyFrameInterval.prototype.remove = function() {
+
+};

@@ -4,6 +4,11 @@ UI.TimelineControl = function(animatable, property, start, end) {
 
 	var timeline = this;
 
+    this.classList.add("timeline");
+    this.classList.add("display-value");
+
+    this.handle("dblclick");
+
 	this.keyFrames = [];
 	this.intervals = [];
 
@@ -16,8 +21,8 @@ UI.TimelineControl = function(animatable, property, start, end) {
 	};
 
 	timeline.handleTimeChange = function() {
-		var prev = timeline.keyFrames[this.position - 1],
-			next = timeline.keyFrames[this.position + 1];
+		var prev = this.prev,
+			next = this.next;
 
 		if(next && this.time > next.time) {
 			this.time = next.time - 1;
@@ -28,8 +33,8 @@ UI.TimelineControl = function(animatable, property, start, end) {
 	};
 
 
-	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property],end), 0);
-	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property], this._current), 0);
+	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property],end, false), 0);
+	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property], this._current, false), 0);
 
 	this._changeAnimatable = false;
 
@@ -83,6 +88,9 @@ Object.defineProperty(UI.TimelineControl.prototype, "current", {
 	}
 });
 
+UI.TimelineControl.prototype.ondblclick = function(e) {
+	this.addAtTime(this.valueAtOffset(e.pageX - this.left));
+};
 
 UI.TimelineControl.prototype.setActiveKeyFrame = function() {
 	this.active = null;
@@ -114,14 +122,21 @@ UI.TimelineControl.prototype.selectKeyFrame = function(keyFrame) {
 };
 
 UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
-	var timeline = this;
+	var timeline = this,
+		keyFrames = this.keyFrames;
 	this.append(keyFrame);
 
 	keyFrame.addEventListener("select", this.handleSelect);
 	keyFrame.addEventListener("timechange", this.handleTimeChange);
+	keyFrame.element.addEventListener("dblclick", function(e) {
+		timeline.removeKeyFrame(timeline.findKeyFramePos(keyFrame));
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
+	});
 
-	if(this.keyFrames.length) {
-		var interval = new this.animatable.intervalConstructor(keyFrame, this.keyFrames[index], this.animatable.paper);
+	if(keyFrames.length) {
+		var interval = new this.animatable.intervalConstructor(keyFrame, this.keyFrames[index], this.animatable);
 
 		interval.addEventListener("change", function() {
 			timeline._changeAnimatable = true;
@@ -141,15 +156,34 @@ UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
 		}
 		this.intervals.splice(index, 0, interval);
 	}
-	this.keyFrames[index] && (this.keyFrames[index].position = index + 1);
-	this.keyFrames.splice(index, 0, keyFrame);
-	keyFrame.position = index;
+	keyFrames.splice(index, 0, keyFrame);
+
+	keyFrames[index].next = keyFrames[index + 1];
+	keyFrames[index].prev = keyFrames[index - 1];
+
+	if(keyFrames[index + 1]) keyFrames[index + 1].prev = keyFrames[index];
+	if(keyFrames[index - 1]) keyFrames[index - 1].next = keyFrames[index];
+
 
 	this.setActiveKeyFrame();
 };
 
 UI.TimelineControl.prototype.addAtTime = function(time) {
+	var i = this.getPositionAt(time);
 
+	this.addAtPosition(new UI.KeyFrameControl(this, this.curInterval.getInterval(time), time), i + 1);
+};
+
+
+//indexOf performance seems to be better for smaller collections and binarySearch for larger
+//however we don't really expect huge numbers of keyFrames so we use indexOf unless specified
+UI.TimelineControl.prototype.findKeyFramePos = function(keyFrame, binarySearch) {
+	var keyFrames = this.keyFrames,
+		i = binarySearch ? this.getPositionAt(keyFrame.time) : keyFrames.indexOf(keyFrame);
+	return keyFrames[i] == keyFrame ? i : -1;
+}
+
+UI.TimelineControl.prototype.getPositionAt = function(time) {
 	var k = this.keyFrames,
 		il = k.length,
 		min = 0,
@@ -157,40 +191,48 @@ UI.TimelineControl.prototype.addAtTime = function(time) {
 		i,
 		last = 0;
 
-
 	while ( 1 ) {
 		i = Math.floor((min + max) / 2);
 		if (last == i) break;
 		last = i;
-		if ( this.keyFrames[i].time < time) {
+		if ( k[i]._value < time) {
 			min = i;
 		}
-		else if ( this.keyFrames[i].time > time) {
+		else if ( k[i]._value > time) {
 			max = i;
 		}
 		else {
 			break;
 		}
 	}
-
-	this.addAtPosition(new UI.KeyFrameControl(this, this.curInterval.getInterval(time), time), i + 1);
-};
+	return i;
+}
 
 
 
 UI.TimelineControl.prototype.removeKeyFrame = function(index) {
-	if(this.keyFrames.length > 2) {
+	var keyFrames = this.keyFrames,
+		intervals = this.intervals;
 
-		var prevInterval = this.intervals[index - 1],
-			interval = this.intervals[index],
-			next = this.keyFrames[index + 1];
+	if(keyFrames.length > 2) {
 
+		var prevInterval = intervals[index - 1],
+			interval = intervals[index],
+			next = keyFrames[index + 1];
 
-		this.remove(this.keyFrames[index]);
+		//remove the actual keyframe element from the DOM
+		this.remove(keyFrames[index]);
+
+		//remove the CurveKeyFrameIntervals path from the DOM
+		//this only applies in the case of CurvekeyFrameIntervals but 
+		//there is a place holder function in other Intervals
 		interval.remove();
 
-		this.keyFrames.splice(index, 1);
-		this.intervals.splice(index, 1);
+		keyFrames.splice(index, 1);
+		intervals.splice(index, 1);
+
+		keyFrames[index - 1].next = keyFrames[index];
+		keyFrames[index].prev = keyFrames[index - 1];
 
 		prevInterval._next = next;
 
@@ -199,5 +241,88 @@ UI.TimelineControl.prototype.removeKeyFrame = function(index) {
 		}
 
 		this.setActiveKeyFrame();
+
+		this.curInterval.update();
+
 	}
 };
+
+
+UI.TimelineControl.prototype.test = function(perf) {
+	var keyFrames = this.keyFrames,
+		success = true;
+
+	console.group("test");
+
+	console.groupCollapsed("Test insert location is correct");
+	for(var i = 0, il = keyFrames.length; i < il - 1; i++) {
+		var cur = keyFrames[i],
+			next = keyFrames[i + 1],
+			valid = cur.time < next.time;
+
+		console.log("%d is less than %d: 	%s", cur.time.toFixed(2), next.time.toFixed(2), valid);
+
+		success = valid && success;
+	}
+	console.log("test was successful: 	%s", success);
+	console.groupEnd();
+
+
+	console.groupCollapsed("Test next are ok");
+	success = true;
+	for(var i = 0, il = keyFrames.length; i < il - 1; i++) {
+		var cur = keyFrames[i],
+			next = keyFrames[i + 1]
+			valid = cur.next == next;
+
+		console.log("keyFrame[%d].next is equal keyFrame[%d]: 		%s", i, i + 1, valid);
+
+		success = valid && success;
+	}
+	console.log("test was successful: %s", success);
+	console.groupEnd();
+
+	console.groupCollapsed("Test prev are ok");
+	success = true;
+	for(var i = 0, il = keyFrames.length; i < il; i++) {
+		var cur = keyFrames[i],
+			prev = keyFrames[i - 1]
+			valid = cur.prev == prev;
+
+		console.log("keyFrame[%d].prev is equal keyFrame[%d]: 		%s", i, i - 1, valid);
+	}
+	console.log("test was successful: %s", success);
+	console.groupEnd();
+
+	if(perf) {
+		console.groupCollapsed("search performance");
+
+		var iter = 1000;
+
+		console.time("insertion");
+		for(i = 1; i < 1000; i++) {
+			this.addAtTime(i);
+		}
+		console.timeEnd("insertion");
+
+		var loc = 800,
+			k = keyFrames[loc];
+
+		console.time("indexOf");
+		for(i = 0; i < iter; i++) {
+			if(loc != keyFrames.indexOf(k)) console.log("error");
+		}
+		console.timeEnd("indexOf");
+
+
+		console.time("findKeyFramePos");
+		for(i = 0; i < iter; i++) {
+			if(loc != this.findKeyFramePos(k, true)) console.log("error");
+		}
+		console.timeEnd("findKeyFramePos");
+
+		console.groupEnd();
+	}
+
+	console.groupEnd();
+}

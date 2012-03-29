@@ -33,7 +33,7 @@ Bone.prototype = new BoneCollection();
 Bone.prototype.constructor = Bone;
 Bone.prototype.supr = BoneCollection.prototype;
 
-Bone.prototype.intervalConstructor = KeyFrameInterval;
+Bone.prototype.intervalConstructor = AngleKeyFrameInterval;
 
 Object.defineProperty(Bone.prototype, "position", {
 	set: function(pos) {

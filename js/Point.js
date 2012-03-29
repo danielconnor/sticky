@@ -56,3 +56,9 @@ Point.prototype.distanceTo = function(x,y) {
 	}
 	return distance(this.x, this.y, x, y);
 };
+
+Point.fromAngle = function(angle, length) {
+	length = length || 1;
+
+	return new Point(length * Math.cos(angle), length * Math.sin(angle));
+}

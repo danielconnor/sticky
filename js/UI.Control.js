@@ -5,8 +5,15 @@ UI.Control = function(tagName, classes) {
 
 	this.children = [];
 	this.element = tagName instanceof Node ? tagName : document.createElement(tagName);
-	this.element.className = "control " + classes;
-    this.element._control = this;
+	this.element._control = this;
+	this.classList = this.element.classList || new DOMTokenList(this.element);
+
+	for(var i = 0, il = classes.length; i < il; i++) {
+		this.classList.add(classes[i]);
+	}
+	this.classList.add("control");
+
+	this.measurement = "%";
 };
 
 UI.Control.prototype = new EventEmitter();
@@ -28,8 +35,15 @@ UI.Control.prototype.handle = function(eventName) {
 	var control = this;
 	this.element.addEventListener(eventName, function(e){
 		control.emit(eventName, [e]);
-        return control["on" + eventName](e);
+		return control["on" + eventName](e);
 	}, false);
+};
+
+UI.Control.prototype.hide = function() {
+	this.classList.add("hidden");
+};
+UI.Control.prototype.show = function() {
+	this.classList.remove("hidden");
 };
 
 Object.defineProperty(UI.Control.prototype, "left", {
@@ -43,10 +57,9 @@ Object.defineProperty(UI.Control.prototype, "left", {
 		return total;
 	},
 	set: function(left) {
-		this.element.style.left = left + "px";
+		this.element.style.left = (Math.round(left * 100) / 100) + this.measurement;
 	}
 });
-
 
 Object.defineProperty(UI.Control.prototype, "top", {
 	get: function() {
@@ -59,6 +72,6 @@ Object.defineProperty(UI.Control.prototype, "top", {
 		return total;
 	},
 	set: function(top) {
-		this.element.style.top = top + "px";
+		this.element.style.top = (Math.round(top * 100 ) / 100) + this.measurement;
 	}
 });

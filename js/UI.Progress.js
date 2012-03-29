@@ -1,45 +1,18 @@
 UI.Progress = function(length) {
-	UI.Control.call(this,"input", "progress");
+	UI.SingleRangeControl.call(this,0,1000);
 
-	this.element.setAttribute("type", "range");
-	this.element.setAttribute("min", "0");
+	this.classList.add("progress");
+	this.classList.add("display-value");
 
 	this.length = length;
 	this.current = 0;
 
 	this.handle("change");
 
+	this.value = 0;
+
 };
 
-UI.Progress.prototype = new UI.Control;
+UI.Progress.prototype = new UI.SingleRangeControl;
 UI.Progress.prototype.constructor = UI.Progress;
 
-
-UI.Progress.prototype.onchange = function() {
-	this.current = parseInt(this.element.value, 10);
-};
-
-UI.Progress.prototype.setCurrent = function(current) {
-	this.element.value = this._current = current;	
-};
-
-Object.defineProperty(UI.Progress.prototype, "current", {
-	get: function() {
-		return this._current;
-	},
-	set: function(current) {
-		this.setCurrent(current);
-		this.emit("currentchange", []);
-	}
-});
-
-
-Object.defineProperty(UI.Progress.prototype, "length",{
-	get: function() {
-		return _length;
-	},
-	set: function(length) {
-		this.element.setAttribute("max", this._length = length);
-		this.emit("lengthchange", []);
-	}
-});

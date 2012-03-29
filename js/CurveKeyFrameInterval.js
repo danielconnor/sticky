@@ -1,20 +1,11 @@
-function CurveKeyFrameInterval(prev, next, paper) {
+function CurveKeyFrameInterval(prev, next, animatable) {
 	if(!prev) return;
 
 	var interval = this;
 
-	KeyFrameInterval.call(this, prev, next);
+	VisibleKeyFrameInterval.call(this, prev, next, animatable);
 
-	this.paper = paper;
-	this.element = paper.path();
 	this.totalLength = 0;
-
-	this.attr = {
-		"path": "",
-		"stroke-dasharray": "--",
-		"stroke": "#aaa",
-		"fill": "none"
-	};
 
 	function handleUpdate() {
 		interval.controlPointOffsets[0] = interval.prev._prop.subtract(interval.controlPoints[0]._position);
@@ -34,13 +25,13 @@ function CurveKeyFrameInterval(prev, next, paper) {
 
 
 	this.controlConnections = [
-		paper.path(""),
-		paper.path("")
+		this.paper.path(""),
+		this.paper.path("")
 	];
 
 	this.voodoos = [
-		new Voodoo(this.controlPoints[0], paper),
-		new Voodoo(this.controlPoints[1], paper)
+		new Voodoo(this.controlPoints[0], this.paper),
+		new Voodoo(this.controlPoints[1], this.paper)
 	];
 
 	this.voodoos[0].color = this.voodoos[1].color = "#007800";
@@ -55,13 +46,10 @@ function CurveKeyFrameInterval(prev, next, paper) {
 
 	this.update();
 }
-CurveKeyFrameInterval.prototype = new KeyFrameInterval();
+CurveKeyFrameInterval.prototype = new VisibleKeyFrameInterval();
 CurveKeyFrameInterval.prototype.constructor = CurveKeyFrameInterval;
-CurveKeyFrameInterval.prototype.supr = KeyFrameInterval.prototype;
+CurveKeyFrameInterval.prototype.supr = VisibleKeyFrameInterval.prototype;
 
-CurveKeyFrameInterval.prototype.draw = function() {
-	this.element.attr(this.attr);
-};
 
 CurveKeyFrameInterval.prototype.update = function() {
 	var cp = this.controlPoints;
@@ -91,9 +79,10 @@ CurveKeyFrameInterval.prototype.getInterval = function(time) {
 };
 
 CurveKeyFrameInterval.prototype.remove = function() {
+	this.supr.remove.call(this);
+
 	this.controlConnections[0].remove();
 	this.controlConnections[1].remove();
 	this.voodoos[0].remove();
 	this.voodoos[1].remove();
-	this.element.remove();
 };

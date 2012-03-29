@@ -1,5 +1,5 @@
 UI.TimelineCollectionControl = function() {
-	UI.Control.call(this, "div", "timeline-collection");
+	UI.Control.call(this, "div", ["timeline-collection"]);
 
 };
 UI.TimelineCollectionControl.prototype = new UI.Control();
