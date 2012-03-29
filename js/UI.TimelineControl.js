@@ -4,10 +4,10 @@ UI.TimelineControl = function(animatable, property, start, end) {
 
 	var timeline = this;
 
-    this.classList.add("timeline");
-    this.classList.add("display-value");
+	this.classList.add("timeline");
+	this.classList.add("display-value");
 
-    this.handle("dblclick");
+	this.handle("dblclick");
 
 	this.keyFrames = [];
 	this.intervals = [];
@@ -93,32 +93,48 @@ UI.TimelineControl.prototype.ondblclick = function(e) {
 };
 
 UI.TimelineControl.prototype.setActiveKeyFrame = function() {
-	this.active = null;
-	this.prev = null;
-	this.next = null;
-	this.prevInterval = null;
-	this.curInterval = null;
+	var keyFrames = this.keyFrames,
+		intervals = this.intervals,
+		current = this._current;
 
-	if(this._current >= this.keyFrames[0].time && this._current <= this.keyFrames[this.keyFrames.length - 1].time) {
-		for(var i = 0, k = this.keyFrames, il = k.length; i < il; i++) {
-			if(k[i].time === this._current) {
-				this.active = k[i];
-				this.curInterval = this.intervals[i] || null;
-				this.prevInterval = this.intervals[i - 1] || null;
+
+	if(!(this.curInterval && this.curInterval._prev._value < current && this.curInterval._next._value > current) || (this.active && this.active._value != current)) {
+		if(current >= keyFrames[0]._value && current <= keyFrames[keyFrames.length - 1]._value) {
+
+			var i = this.getPositionAt(this._current),
+				keyFrame = keyFrames[i],
+				interval;
+
+			if(keyFrame._value === current) {
+				if(this.active !== keyFrame) {
+
+					this.active && (this.active.active = false);
+					this.active = keyFrame;
+					this.active.active = true;
+					
+					this.curInterval && (this.curInterval.active = false);
+					this.curInterval = intervals[i];
+					this.curInterval && (this.curInterval.active = true);
+
+					this.prevInterval = this.intervals[i - 1];
+				}
 				return;
 			}
+			else if(this.curInterval != this.intervals[i] || !this.next || !this.prev) {
+				this.curInterval && (this.curInterval.active = false);
+				this.curInterval = this.intervals[i];
+				this.curInterval && (this.curInterval.active = true);
+				this.prev = keyFrames[i];
+				this.next = keyFrames[i + 1];
+			}
+			this.active && (this.active.active = false);
+			this.active = undefined;
 		}
-		for(i = 0; i < il && this._current >= k[i].time; i++)
-			;
-
-		this.curInterval = this.intervals[i - 1] || null;
-		this.prev = k[i - 1] || null;
-		this.next = k[i] || null;
 	}
 };
 
 UI.TimelineControl.prototype.selectKeyFrame = function(keyFrame) {
-	this.current = keyFrame.time;
+	this.current = keyFrame._value;
 };
 
 UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
@@ -185,9 +201,8 @@ UI.TimelineControl.prototype.findKeyFramePos = function(keyFrame, binarySearch) 
 
 UI.TimelineControl.prototype.getPositionAt = function(time) {
 	var k = this.keyFrames,
-		il = k.length,
+		max = k.length,
 		min = 0,
-		max = il - 1,
 		i,
 		last = 0;
 
@@ -243,7 +258,6 @@ UI.TimelineControl.prototype.removeKeyFrame = function(index) {
 		this.setActiveKeyFrame();
 
 		this.curInterval.update();
-
 	}
 };
 

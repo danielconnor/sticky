@@ -45,6 +45,7 @@ function CurveKeyFrameInterval(prev, next, animatable) {
 	this.controlConnections[1].toBack();
 
 	this.update();
+	this.active = false;
 }
 CurveKeyFrameInterval.prototype = new VisibleKeyFrameInterval();
 CurveKeyFrameInterval.prototype.constructor = CurveKeyFrameInterval;
@@ -86,3 +87,20 @@ CurveKeyFrameInterval.prototype.remove = function() {
 	this.voodoos[0].remove();
 	this.voodoos[1].remove();
 };
+
+Object.defineProperty(CurveKeyFrameInterval.prototype, "active", {
+	set: function(active) {
+		this._active = !!active;//make sure it's a boolean
+
+		if(active) {
+			this.attr.stroke = "#000";
+			this.emit("activate",[]);
+		}
+		else {
+			this.attr.stroke = "#aaa"
+			this.emit("deactivate",[]);
+		}
+		this.draw();
+
+	}
+});

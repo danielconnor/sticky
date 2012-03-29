@@ -3,6 +3,8 @@ function KeyFrameInterval(prev, next) {
 
 	this._next = next;
 	this._prev = prev;
+
+	this._active = false;
 }
 
 KeyFrameInterval.prototype = new EventEmitter();
@@ -31,6 +33,23 @@ KeyFrameInterval.prototype.getInterval = function(time) {
 
 	return this._prev.prop + (this._next.prop - this._prev.prop) * f;
 };
+
+Object.defineProperty(KeyFrameInterval.prototype, "active", {
+	get: function() {
+		return this._active;
+	},
+	set: function(active) {
+		this._active = !!active;//make sure it's a boolean
+
+		if(active) {
+			this.emit("activate",[]);
+		}
+		else {
+			this.emit("deactivate",[]);
+		}
+
+	}
+});
 
 KeyFrameInterval.prototype.update = function() {
 

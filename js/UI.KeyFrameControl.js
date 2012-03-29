@@ -8,8 +8,9 @@ UI.KeyFrameControl = function(parent, property, time, enabled) {
 	this.position = null;
 	this._prop = property || {};
 	this.value = time;
+	this._active = false;
 
-	//even tho the keyframes are stored in an array it is helpful to keep a reference
+	//even though the keyframes are stored in an array it is helpful to keep a reference
 	//to the next and previous keyframes in the list rather than searching for them 
 	//each time they need to be accessed
 	this.next = null;
@@ -42,6 +43,25 @@ Object.defineProperty(UI.KeyFrameControl.prototype, "prop", {
 	}
 });
 
+Object.defineProperty(UI.KeyFrameControl.prototype, "active", {
+	get: function() {
+		return this._prop;
+	},
+	set: function(active) {
+
+		this._active = active;
+
+
+		if(active) {
+			this.classList.add("active");
+			this.emit("activate", []);
+		}
+		else {
+			this.classList.remove("active");
+			this.emit("deactivate", []);
+		}
+	}
+});
 
 //TODO: get rid of this. Left for compatability reasons 
 Object.defineProperty(UI.KeyFrameControl.prototype, "time", {
@@ -51,7 +71,6 @@ Object.defineProperty(UI.KeyFrameControl.prototype, "time", {
 	set: function(time) {
 
 		this.value = time;
-
 	}
 });
 

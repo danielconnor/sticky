@@ -3,9 +3,16 @@ function AngleKeyFrameInterval(prev, next, animatable) {
 
 	VisibleKeyFrameInterval.call(this, prev, next, animatable);
 
+	var interval = this;
+
 	delete this.attr["stroke-dasharray"];
 	this.attr.stroke = "#000";
 
+	this.animatable.addEventListener("anglechange", function() {
+		interval._active && interval.update();
+	});
+
+	this.active = false;
 }
 
 AngleKeyFrameInterval.prototype = new VisibleKeyFrameInterval();
@@ -32,7 +39,20 @@ AngleKeyFrameInterval.prototype.update = function() {
 
 
 	this.supr.update.call(this);
-}
+};
 
+Object.defineProperty(AngleKeyFrameInterval.prototype, "active", {
+	set: function(active) {
+		this._active = !!active;//make sure it's a boolean
 
+		if(active) {
+			this.element.show();
+			this.emit("activate",[]);
+		}
+		else {
+			this.element.hide();
+			this.emit("deactivate",[]);
+		}
 
+	}
+});
