@@ -12,6 +12,9 @@ function AnimatableObject(tagName, position /*Point*/) {
 	this._position = position || new Point();
 
 	this.properties = [];
+
+	this.element.setAttribute("stroke-width", "2.5px");
+	this.element.setAttribute("stroke", "#000000");
 }
 
 AnimatableObject.prototype = new DOMElement();
