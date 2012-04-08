@@ -1,10 +1,8 @@
 
-function BoneCollection(paper /*Raphael paper*/, position /*Point*/) {
-	if(!paper) return;
+function BoneCollection(tagName, position /*Point*/) {
+	if(!tagName) return;
 
-	AnimatableObject.call(this, paper, position);
-
-	var boneCollection = this;
+	AnimatableObject.call(this, tagName, position);
 
 	this.bones = [];
 }
@@ -22,15 +20,17 @@ BoneCollection.prototype.addBone = function() {
 	else if(typeof arguments[0] === "number" && typeof arguments[1] === "number") {
 		switch(arguments[2]){
 			case "bone": 
-					bone = new Bone(this.paper, this, arguments[0], arguments[1]);
+					bone = new Bone(this, arguments[0], arguments[1]);
 				break;
 			case "skull":
-					bone = new Skull(this.paper, this, arguments[0], arguments[1]);
+					bone = new Skull(this, arguments[0], arguments[1]);
 				break;
 		}
 		if(arguments[3] instanceof Function) arguments[3](bone);
 	}
 	this.bones.push(bone);
+
+	this.append(bone);
 
 	return bone;
 }

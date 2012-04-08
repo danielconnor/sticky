@@ -1,8 +1,7 @@
-function Voodoo(obj, paper) {
+function Voodoo(obj) {
 	EventEmitter.call(this);
 
 	var pin = this;
-	this.paper = paper;
 	this.obj = obj;
 
 

@@ -1,11 +1,9 @@
 UI.Control = function(tagName, classes) {
-	EventEmitter.call(this);
+	DOMElement.call(this, "http://www.w3.org/1999/xhtml", tagName);
 
 	if(!arguments[0]) return;
 
 	this.children = [];
-	this.element = tagName instanceof Node ? tagName : document.createElement(tagName);
-	this.element._control = this;
 	this.classList = this.element.classList || new DOMTokenList(this.element);
 
 	for(var i = 0, il = classes.length; i < il; i++) {
@@ -16,28 +14,8 @@ UI.Control = function(tagName, classes) {
 	this.measurement = "%";
 };
 
-UI.Control.prototype = new EventEmitter();
+UI.Control.prototype = new DOMElement();
 UI.Control.prototype.constructor = UI.Control;
-
-UI.Control.prototype.append = function(control) {
-	this.children.push(control);
-	this.element.appendChild(control.element);
-	return control;
-};
-
-UI.Control.prototype.remove = function(control) {
-	this.children.splice(this.children.indexOf(control), 1);
-	this.element.removeChild(control.element);
-	return control;
-};
-
-UI.Control.prototype.handle = function(eventName) {
-	var control = this;
-	this.element.addEventListener(eventName, function(e){
-		control.emit(eventName, [e]);
-		return control["on" + eventName](e);
-	}, false);
-};
 
 UI.Control.prototype.hide = function() {
 	this.classList.add("hidden");

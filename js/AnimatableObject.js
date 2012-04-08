@@ -4,17 +4,33 @@
 * events: positionchange
 */
 
-function AnimatableObject(paper, position /*Point*/) {
-	ControlPoint.call(this, position);
+function AnimatableObject(tagName, position /*Point*/) {
+	if(!tagName) return;
 
-	if(!paper) return;
+	DOMElement.call(this, "http://www.w3.org/2000/svg", tagName, position);
 
-	this.paper = paper;
+	this._position = position || new Point();
 
 	this.properties = [];
 }
 
-AnimatableObject.prototype = new ControlPoint();
+AnimatableObject.prototype = new DOMElement();
 AnimatableObject.prototype.constructor = AnimatableObject;
 
 AnimatableObject.prototype.intervalConstructor = CurveKeyFrameInterval;
+
+AnimatableObject.prototype.setPosition = function(pos) {
+	if(this._position.x != pos.x || this._position.y != pos.y) {
+		this._position = pos;
+
+		this.emit("positionchange", []);
+		this.emit("change", []);
+	}
+};
+
+Object.defineProperty(AnimatableObject.prototype, "position", {
+	set: AnimatableObject.prototype.setPosition,
+	get: function() {
+		return this._position;
+	}
+});

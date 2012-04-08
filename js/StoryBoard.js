@@ -43,6 +43,8 @@ StoryBoard.prototype.addObject = function(obj) {
 		storyboard.progress.value = current;
 	});
 
+	this.screen.canvas.appendChild(obj.obj.element);
+
 	this.keyFrames.append(obj.timelineCollection);
 };
 

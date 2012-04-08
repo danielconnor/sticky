@@ -2,30 +2,18 @@
 * description: 
 * events: anglechange, lengthchange, change
 */
-function Bone(paper /*Raphael paper*/ ,parent /*AnimatableObject*/, angle /*degrees*/, length/*pixels*/, element/*Raphael Element*/) {
-	if(!paper) return;
+function Bone(parent /*AnimatableObject*/, angle /*degrees*/, length/*pixels*/, element/*Raphael Element*/) {
+	if(!parent) return;
 
-	BoneCollection.call(this, paper, null);
+	BoneCollection.call(this, "path", null);
 	var bone = this;
 
 	this._angle = angle;
 	this._length = length;
 	this.parent = parent;
+	
+	this.handle("click");
 
-	this.attrs = {
-		stroke: "#000",
-		fill: "none",
-		"stroke-width": "2.5px"
-	};
-
-	this.element = element || paper.path();
-
-
-	this.element.click(function(e) {
-		bone.handleClick(e);
-	});
-
-	this.element.toBack();
 
 	this.update();
 }
@@ -74,7 +62,7 @@ Bone.prototype.update = function() {
 		len = this._length,
 		pos = this._position = new Point(len * Math.cos(radians), len * Math.sin(radians)).add(parentPos);
 
-	this.attrs.path = "M" + parentPos.toString() + "L" + pos.toString();
+	this.element.setAttribute("d", "M" + parentPos.toString() + "L" + pos.toString());
 
 	this.draw();
 	this.supr.update.call(this);
@@ -83,10 +71,10 @@ Bone.prototype.update = function() {
 };
 
 Bone.prototype.draw = function() {
-	this.element.attr(this.attrs);
+	//this.element.attr(this.attrs);
 };
 
 
-Bone.prototype.handleClick = function(e) {
+Bone.prototype.onclick = function(e) {
 
 };
