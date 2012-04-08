@@ -1,34 +1,16 @@
 UI.RangeSliderControl = function(parent, enabled) {
-	UI.Control.call(this, "div", ["range-slider-control"]);
+	UI.Draggable.call(this, "div", ["range-slider-control"]);
 
-	var slider = this;
-
-	this.dragging = false;
 	this.enabled = enabled !== undefined ? enabled : true;
 
 	this.parent = parent;
 
-	this.handle("mousedown");
-	this.handle("dragstart");
-	this.handle("selectstart");
-
-	document.addEventListener("mousemove", function(e) {
-		slider.onmousemove(e);
-	});
-	document.addEventListener("mouseup", function(e) {
-		slider.onmouseup(e);
-	});
-	document.addEventListener("selectstart", function(e) {
-		slider.onselectstart(e);
-	});
-
-
 	this._value = 0;
 }
 
-UI.RangeSliderControl.prototype = new UI.Control();
+UI.RangeSliderControl.prototype = new UI.Draggable();
 UI.RangeSliderControl.prototype.constructor = UI.RangeSliderControl;
-UI.RangeSliderControl.prototype.supr = UI.Control;
+UI.RangeSliderControl.prototype.supr = UI.Draggable.prototype;
 
 UI.RangeSliderControl.prototype.onmousemove = function(e, parent) {
 	//parent can be set to true when this funtion is called from a parent
@@ -44,34 +26,9 @@ UI.RangeSliderControl.prototype.onmousemove = function(e, parent) {
 		this.element.setAttribute("value", value.toFixed(2));
 
 		this.emit("change", [this]);
-		return false;
 	}
+	return this.supr.onmousemove.call(this,e);
 };
-
-UI.RangeSliderControl.prototype.onmousedown = function(e) {
-	this.dragging = true;
-};
-
-
-UI.RangeSliderControl.prototype.onmouseup = function(e) {
-	this.dragging = false;
-};
-
-
-UI.RangeSliderControl.prototype.ondragstart = function(e) {
-	//prevent the browser beginning a drag event when we try to move the slider
-	e.stopPropagation();
-	e.preventDefault();
-	return false;
-}
-UI.RangeSliderControl.prototype.onselectstart = function(e) {
-	if(this.dragging) {
-		e.stopPropagation();
-		e.preventDefault();
-		return false;
-	}
-}
-
 Object.defineProperty(UI.RangeSliderControl.prototype, "value", {
 	get: function() {
 		return this._value;

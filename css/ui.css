@@ -97,3 +97,28 @@
 	position: absolute;
 	top: 100%;
 }
+
+.control.window {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: inline-block;
+}
+
+.control.window .control.titlebar {
+	position: relative;
+	left: 0;
+	right: 0;
+	line-height: 20px;
+	font-size: 12px;
+	border-radius: 3px 3px 0 0;
+	background-color: #aaa;
+	padding: 0 10px;
+	cursor: move;
+}
+.control.window .control.contents {
+	background-color: #fff;
+	display: inline-block;
+	width: 100%;
+	
+}

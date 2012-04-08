@@ -160,7 +160,7 @@ UI.TimelineControl.prototype.addAtPosition = function(keyFrame, index) {
 			if(timeline.active) {
 				timeline.animatable[timeline.property] = timeline.active._prop;
 			}
-			else if(timeline.curInterval) {
+			else if(timeline.curInterval === this) {
 				timeline.animatable[timeline.property] = timeline.curInterval.getInterval(timeline._current);
 			}
 		});
@@ -204,16 +204,18 @@ UI.TimelineControl.prototype.getPositionAt = function(time) {
 		max = k.length,
 		min = 0,
 		i,
-		last = 0;
+		last = 0,
+		v;
 
 	while ( 1 ) {
-		i = Math.floor((min + max) / 2);
+		i = (min + max) >> 1;
 		if (last == i) break;
 		last = i;
-		if ( k[i]._value < time) {
+		v = k[i]._value;
+		if (v < time) {
 			min = i;
 		}
-		else if ( k[i]._value > time) {
+		else if (v > time) {
 			max = i;
 		}
 		else {
@@ -311,7 +313,7 @@ UI.TimelineControl.prototype.test = function(perf) {
 	if(perf) {
 		console.groupCollapsed("search performance");
 
-		var iter = 1000;
+		var iter = 10000;
 
 		console.time("insertion");
 		for(i = 1; i < 1000; i++) {
@@ -319,21 +321,25 @@ UI.TimelineControl.prototype.test = function(perf) {
 		}
 		console.timeEnd("insertion");
 
-		var loc = 800,
-			k = keyFrames[loc];
+		for(var j = 0; j < 100; j++) {
+			var loc = Math.floor(Math.random() * 999),
+				k = keyFrames[loc];
 
-		console.time("indexOf");
-		for(i = 0; i < iter; i++) {
-			if(loc != keyFrames.indexOf(k)) console.log("error");
+			console.log(loc);
+
+			console.time("indexOf");
+			for(i = 0; i < iter; i++) {
+				if(loc != keyFrames.indexOf(k)) console.log("error");
+			}
+			console.timeEnd("indexOf");
+
+
+			console.time("findKeyFramePos");
+			for(i = 0; i < iter; i++) {
+				if(loc != this.findKeyFramePos(k, true)) console.log("error");
+			}
+			console.timeEnd("findKeyFramePos");
 		}
-		console.timeEnd("indexOf");
-
-
-		console.time("findKeyFramePos");
-		for(i = 0; i < iter; i++) {
-			if(loc != this.findKeyFramePos(k, true)) console.log("error");
-		}
-		console.timeEnd("findKeyFramePos");
 
 		console.groupEnd();
 	}

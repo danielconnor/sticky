@@ -1,9 +1,10 @@
 (function() {
 
-	var width = window.innerWidth,
-		height = window.innerHeight,
-		screen = document.createElement("div"),
-		paper = Raphael(screen, width, height),
+	var WIDTH = window.innerWidth,
+		HEIGHT = window.innerHeight,
+		screen = document.createElement("div");
+		
+		paper = Raphael(screen, WIDTH, HEIGHT),
 		storyboard = new StoryBoard(paper);
 
 	window.addEventListener("resize", function() {

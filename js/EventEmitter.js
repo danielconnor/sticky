@@ -2,21 +2,20 @@ function EventEmitter() {
 	this.functions = {};
 }
 EventEmitter.prototype.addEventListener = function(name, func) {
-	if(!this.functions[name]) {
-		this.functions[name] = [];
-	}
-	this.functions[name].push(func);
+	var funcs = this.functions;
+	(funcs[name] = funcs[name] || []).push(func);
 };
 EventEmitter.prototype.removeEventlistener = function(name,func) {
-	if(this.functions[name]) {
-		this.functions[name].splice(this.functions[name].indexOf(func), 1);
-	}
+	var funcs = this.functions[name];
+	funcs && funcs.splice(funcs.indexOf(func), 1);
 };
 EventEmitter.prototype.emit = function(name,args) {
-	if(this.functions[name]) {
-		var evtFuncs = this.functions[name];
-		for(var i = 0, il = evtFuncs.length; i < il; i++) {
-			evtFuncs[i].apply(this,args);
-		}
+	var evtFuncs = this.functions[name];
+	if(!evtFuncs) return;
+	for(var i = 0, e; e = evtFuncs[i++];) {
+		e.apply(this, args);
 	}
+};
+EventEmitter.prototype.destroy = function() {
+
 };

@@ -45,3 +45,30 @@ window.DOMTokenList = window.DOMTokenList || (function() {
     }
     return DOMTokenList;
 })();
+
+
+function binarySearch(object, array, comparator)
+{
+    var first = 0;
+    var last = array.length - 1;
+
+    while (first <= last) {
+        var mid = (first + last) >> 1;
+        var c = comparator(object, array[mid]);
+        if (c > 0)
+            first = mid + 1;
+        else if (c < 0)
+            last = mid - 1;
+        else
+            return mid;
+    }
+
+    // Return the nearest lesser index, "-1" means "0, "-2" means "1", etc.
+    return -(first + 1);
+}
+
+Object.defineProperty(Array.prototype, "binaryIndexOf", { value: function(value, comparator)
+{
+    var result = binarySearch(value, this, comparator);
+    return result >= 0 ? result : -1;
+}});

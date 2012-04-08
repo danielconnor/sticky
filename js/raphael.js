@@ -287,6 +287,7 @@
         math = Math,
         mmax = math.max,
         mmin = math.min,
+        sqrt = math.sqrt,
         abs = math.abs,
         pow = math.pow,
         PI = math.PI,
@@ -976,8 +977,8 @@
     
     R.findDotsAtSegment = function (p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y, t) {
         var t1 = 1 - t,
-            t13 = pow(t1, 3),
-            t12 = pow(t1, 2),
+            t12 = t1 * t1,
+            t13 = t12 * t1,
             t2 = t * t,
             t3 = t2 * t,
             x = t13 * p1x + t12 * 3 * t * c1x + t1 * 3 * t * t * c2x + t3 * p2x,
@@ -1000,6 +1001,19 @@
             start: {x: ax, y: ay},
             end: {x: cx, y: cy},
             alpha: alpha
+        };
+    };
+    R.findDotsAtSegmentOptimized = function (p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y, t) {
+        var t1 = 1 - t,
+            t12 = t1 * t1,
+            t13 = t12 * t1,
+            t2 = t * t,
+            t3 = t2 * t,
+            x = t13 * p1x + t12 * 3 * t * c1x + t1 * 3 * t * t * c2x + t3 * p2x,
+            y = t13 * p1y + t12 * 3 * t * c1y + t1 * 3 * t * t * c2y + t3 * p2y;
+        return {
+            x: x,
+            y: y,
         };
     };
     var pathDimensions = cacher(function (path) {
@@ -2341,14 +2355,14 @@
             cache.data = [];
         }
         precision = cache.precision || precision;
-        for (var i = 0; i < precision + 1; i++) {
+        for (var i = 0; i <= precision + 1; i++) {
             if (cache.data[i * precision]) {
                 dot = cache.data[i * precision];
             } else {
                 dot = R.findDotsAtSegment(p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y, i / precision);
                 cache.data[i * precision] = dot;
             }
-            i && (len += pow(pow(old.x - dot.x, 2) + pow(old.y - dot.y, 2), .5));
+            i && (len += sqrt(pow(old.x - dot.x, 2) + pow(old.y - dot.y, 2)));
             if (length != null && len >= length) {
                 return dot;
             }
@@ -2398,7 +2412,50 @@
             point.alpha && (point = {x: point.x, y: point.y, alpha: point.alpha});
             return point;
         };
+    },
+    //less accurate but faster
+    getPointAtSegmentLengthOptimized = function (p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y, length, total) {
+        var len = 0,
+            precision = 100,
+            name = [p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y].join(),
+            cache = curveslengths[name],
+            old, dot;
+        !cache && (curveslengths[name] = cache = {data: []});
+
+        cache.timer && clearTimeout(cache.timer);
+        cache.timer = setTimeout(function () {delete curveslengths[name];}, 2e3);
+
+        if (length != null && !cache.precision) {
+            total = total || getPointAtSegmentLengthOptimized(p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y);
+            cache.precision = Math.floor(total) * 10;
+        }
+
+        precision = cache.precision || precision;
+        for (var i = 0; i <= precision; i += 10) {
+            dot = R.findDotsAtSegmentOptimized(p1x, p1y, c1x, c1y, c2x, c2y, p2x, p2y, i / precision);
+            if(i) {
+                var x = old.x - dot.x,
+                    y = old.y - dot.y;
+                len += sqrt(x * x + y * y);
+            };
+            if (length != null && len >= length) {
+                return dot;
+            }
+            old = dot;
+        }
+        if (length == null) {
+            return len;
+        }
+    },
+    getPointAtLengthOptimized = function (path, length, total) {
+        var x, y, p;
+        p = path[0];
+        x = +p[1];
+        y = +p[2];
+        p = path[1];
+        return getPointAtSegmentLengthOptimized(x, y, p[1], p[2], p[3], p[4], p[5], p[6], length, total);
     };
+    
     var getTotalLength = getLengthFactory(1),
         getPointAtLength = getLengthFactory(),
         getSubpathsAtLength = getLengthFactory(0, 1);
@@ -2422,10 +2479,21 @@
         }
         return getTotalLength(this.attrs.path);
     };
+    elproto.getTotalLengthOptimized = function () {
+        return getPointAtLengthOptimized(this.attrs.path);
+    };
     
     elproto.getPointAtLength = function (length) {
         if (this.type != "path") {return;}
+        if(this.node.getPointAtLength) {
+            return this.node.getPointAtLength(length);
+        }
         return getPointAtLength(this.attrs.path, length);
+    };
+    elproto.getPointAtLengthOptimized = function (length, total) {
+        return this.node.getPointAtLength ? 
+                this.node.getPointAtLength(length) :
+                getPointAtLengthOptimized(this.attrs.path, length, total);
     };
     
     elproto.getSubpath = function (from, to) {
@@ -3377,6 +3445,7 @@ window.Raphael.svg && function (R) {
         toFloat = parseFloat,
         toInt = parseInt,
         math = Math,
+        sqrt = math.sqrt,
         mmax = math.max,
         abs = math.abs,
         pow = math.pow,

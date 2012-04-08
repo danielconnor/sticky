@@ -12,6 +12,8 @@ function AngleKeyFrameInterval(prev, next, animatable) {
 		interval._active && interval.update();
 	});
 
+	
+
 	this.active = false;
 }
 

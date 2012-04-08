@@ -7,7 +7,7 @@ function StoryBoard(screen) {
 	this.screen.canvas.parentNode.id = "screen";
 	this.element.appendChild(this.screen.canvas.parentNode);
 
-	this.controls = new UI.Control("div","");
+	this.controls = new UI.Window("Controls");
 	this.controls.element.id = "controls";
 	this.append(this.controls);
 
@@ -22,7 +22,11 @@ function StoryBoard(screen) {
 	this.controls.append(this.keyFrames);
 
 	this.progress.addEventListener("change", function() {
-		storyboard.keyFrames.children[0].setCurrent(this.value);
+		var children = storyboard.keyFrames.children;
+
+		for(var i = 0, il = children.length; i < il; i++) {
+			children[i].setCurrent(this.value);
+		}
 	});
 }
 StoryBoard.prototype = new UI.Control();
