@@ -5,7 +5,6 @@ UI.KeyFrameControl = function(parent, property, time, enabled) {
 
 	this.classList.add("keyframe");
 
-	this.position = null;
 	this._prop = property || {};
 	this.value = time;
 	this._active = false;
@@ -45,12 +44,11 @@ Object.defineProperty(UI.KeyFrameControl.prototype, "prop", {
 
 Object.defineProperty(UI.KeyFrameControl.prototype, "active", {
 	get: function() {
-		return this._prop;
+		return this._active;
 	},
 	set: function(active) {
 
 		this._active = active;
-
 
 		if(active) {
 			this.classList.add("active");

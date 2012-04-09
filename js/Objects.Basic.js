@@ -3,10 +3,10 @@ Objects.Basic = function(obj) {
 	if(!obj) return;
 
 	this.obj = obj;
-	//this.voodoo = new Voodoo(obj, obj.paper);
-	//this.timeline = new UI.TimelineControl(obj, "position", 0, 1000);
+	this.voodoo = new Voodoo(obj);
+	this.timeline = new UI.TimelineControl(obj, "position", 0, 1000);
 	this.timelineCollection = new UI.TimelineCollectionControl();
-	//this.timelineCollection.append(this.timeline);
+	this.timelineCollection.append(this.timeline);
 };
 
 Objects.Basic.prototype = new EventEmitter();

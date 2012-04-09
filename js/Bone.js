@@ -1,19 +1,14 @@
-/*
-* description: 
-* events: anglechange, lengthchange, change
-*/
-function Bone(parent /*AnimatableObject*/, angle /*degrees*/, length/*pixels*/, element/*Raphael Element*/) {
+function Bone(parent, angle, length, tagName) {
 	if(!parent) return;
 
-	BoneCollection.call(this, "path", null);
+	BoneCollection.call(this, tagName || "path", null);
 	var bone = this;
 
 	this._angle = angle;
 	this._length = length;
 	this.parent = parent;
-	
-	this.handle("click");
 
+	this.handle("click");
 
 	this.update();
 }
@@ -23,10 +18,17 @@ Bone.prototype.supr = BoneCollection.prototype;
 
 Bone.prototype.intervalConstructor = AngleKeyFrameInterval;
 
-Object.defineProperty(Bone.prototype, "position", {
-	set: function(pos) {
-		this.angle = pos.angleBetween(this.parent._position) * 180 / Math.PI;
+Bone.prototype.setPosition = function(x, y) {
+	if(typeof x === "object") {
+		y = x.y;
+		x = x.x;
 	}
+	this.angle = this.parent._position.angleBetween(x,y) * 180 / Math.PI;
+};
+
+//convenience: don't use unless you have to. Using means creating unnessecary objects
+Object.defineProperty(Bone.prototype, "position", {
+	set: Bone.prototype.setPosition
 });
 
 Object.defineProperty(Bone.prototype,"angle", {
@@ -56,24 +58,24 @@ Object.defineProperty(Bone.prototype,"length", {
 
 /*** methods ***/
 Bone.prototype.update = function() {
-
 	var parentPos = this.parent._position,
+		pos = this._position,
 		radians = this._angle * 3.14 / 180,
-		len = this._length,
-		pos = this._position = new Point(len * Math.cos(radians), len * Math.sin(radians)).add(parentPos);
+		len = this._length;
 
-	this.element.setAttribute("d", "M" + parentPos.toString() + "L" + pos.toString());
+	pos.x = len * Math.cos(radians) + parentPos.x;
+	pos.y = len * Math.sin(radians) + parentPos.y;
 
 	this.draw();
+	
 	this.supr.update.call(this);
 
 	this.emit("change", []);
 };
 
 Bone.prototype.draw = function() {
-	//this.element.attr(this.attrs);
-};
-
+	this.element.setAttribute("d", "M" + this.parent._position.toString() + "L" + this._position.toString());
+}
 
 Bone.prototype.onclick = function(e) {
 

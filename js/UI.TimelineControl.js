@@ -32,8 +32,7 @@ UI.TimelineControl = function(animatable, property, start, end) {
 		}
 	};
 
-
-	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property],end, false), 0);
+	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property], end, false), 0);
 	this.addAtPosition(new UI.KeyFrameControl(this, animatable[property], this._current, false), 0);
 
 	this._changeAnimatable = false;

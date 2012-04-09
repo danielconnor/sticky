@@ -1,4 +1,4 @@
-Objects.C.Skeleton = function(paper, position) {
+Objects.C.Skeleton = function(position) {
 	var skeleton = this;
 
 	Objects.Composite.call(this, position, Objects.C.Skeleton.create);
@@ -8,6 +8,7 @@ Objects.C.Skeleton.create = function(position, callback) {
 	var obj = new BoneCollection("g", position);
 
 	obj.addBones(Objects.C.Skeleton.layout, function(bone) {
+		obj.append(bone);
 		callback && callback(bone);
 	});
 

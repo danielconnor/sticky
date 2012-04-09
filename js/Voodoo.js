@@ -1,70 +1,83 @@
 function Voodoo(obj) {
-	EventEmitter.call(this);
+	DOMElement.call(this,"http://www.w3.org/2000/svg", "circle");
 
-	var pin = this;
 	this.obj = obj;
 
-
-	this.point = this.paper.circle(this.obj._position.x, this.obj._position.y, this._size);
-
-	this.point.attr({
-		"stroke": "#000000",
-		"stroke-width": "1.5px",
-		"fill": "#e13370"
-	});
 	this.size = 4;
+	this.color = "#fff"
 
-	this.obj.addEventListener("change", function() {
-		pin.update();
-	});
+	this.obj.addEventListener("change", this.update.bind(this));
 
-	this.obj.addEventListener("activate", function() {
-		
-	});
+	this.parent = parent;
 
-	this.point.drag(function (x, y) {
-		pin.obj.position = new Point(this.offsetX + x, this.offsetY + y);
-		pin.update();
-	}, function (x, y) {
-		this.offsetX = x;
-		this.offsetY = y;
-	});
+	this.offset = null;
 
-	this.point.toFront();
+	this.handle("mousedown");
+	this.handle("dragstart");
+	this.handle("selectstart");
+
+	this.onmousemove = this.onmousemove.bind(this);
+
+	document.addEventListener("mouseup", this.onmouseup.bind(this));
+
+	this.setAttr("stroke", "#000");
+
+	this.update();
 }
 
-Voodoo.prototype = new EventEmitter();
+Voodoo.prototype = new DOMElement();
 Voodoo.prototype.constructor = Voodoo;
 
 Voodoo.prototype.update = function() {
 	var pos = this.obj._position;
-	this.point.attr({
-		cx: pos.x,
-		cy: pos.y
-	});
-};
-Voodoo.prototype.remove = function() {
-	this.point.remove();
+	this.element.setAttribute("cx",pos.x);
+	this.element.setAttribute("cy",pos.y);
 };
 
 Object.defineProperty(Voodoo.prototype, "size", {
 	get: function() {
-		return this._size;
+		return this.element.attrbiutes("r");
 	},
 	set: function(s) {
-		this.point.attr({
-			r: s
-		});
-
-		this._size = s;
+		this.element.setAttribute("r", s);
 	}
 });
 Object.defineProperty(Voodoo.prototype, "color", {
 	get: function() {
-		return this.point.attr("fill");
+		return this.setAttr("fill");
 	},
 	set: function(color) {
-		this.point.attr("fill", color);
+		this.setAttr("fill", color);
 	}
 });
 
+Voodoo.prototype.onmousemove = function(e) {
+	this.emit("drag", [this, e]);
+
+	//instead of creating a new object we'll be more efficient
+	//this.obj.position = new Point(e.pageX, e.pageY);
+	this.obj.setPosition(e.pageX, e.pageY);
+
+	e.preventDefault();
+	e.stopPropagation();
+	return false;
+};
+Voodoo.prototype.onmousedown = function(e) {
+	this.offset = new Point(e.pageX - this.left, e.pageY - this.top);
+	document.addEventListener("mousemove", this.onmousemove, false);
+	e.stopPropagation();
+};
+
+
+Voodoo.prototype.onmouseup = function(e) {
+	document.removeEventListener("mousemove", this.onmousemove);
+	this.offset = null;
+};
+
+
+Voodoo.prototype.ondragstart = 
+Voodoo.prototype.onselectstart = function(e) {
+	e.stopPropagation();
+	e.preventDefault();
+	return false;
+}

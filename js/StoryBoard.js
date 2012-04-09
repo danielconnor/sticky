@@ -3,9 +3,14 @@ function StoryBoard(screen) {
 	var storyboard = this;
 
 	this.objects = [];
-	this.screen = screen;
-	this.screen.canvas.parentNode.id = "screen";
-	this.element.appendChild(this.screen.canvas.parentNode);
+	this.screenContainer = new UI.Control("div");
+	this.screen = new DOMElement("http://www.w3.org/2000/svg", "svg");
+
+	this.screenContainer.append(this.screen);
+
+	this.append(this.screenContainer);
+
+
 
 	this.controls = new UI.Window("Controls");
 	this.controls.element.id = "controls";
@@ -43,7 +48,12 @@ StoryBoard.prototype.addObject = function(obj) {
 		storyboard.progress.value = current;
 	});
 
-	this.screen.canvas.appendChild(obj.obj.element);
+	this.screen.append(obj.obj);
+	this.screen.append(obj.voodoo);
+	var voodoos = obj.voodoos;
+	for(var i =0; i < voodoos.length; i++) {
+		this.screen.append(voodoos[i]);
+	}
 
 	this.keyFrames.append(obj.timelineCollection);
 };

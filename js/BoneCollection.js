@@ -8,7 +8,7 @@ function BoneCollection(tagName, position /*Point*/) {
 }
 BoneCollection.prototype = new AnimatableObject();
 BoneCollection.prototype.constructor = BoneCollection;
-BoneCollection.prototype.supr = AnimatableObject.prototype;
+BoneCollection.prototype.supr = ControlPoint.prototype;
 
 
 BoneCollection.prototype.addBone = function() {
@@ -30,8 +30,6 @@ BoneCollection.prototype.addBone = function() {
 	}
 	this.bones.push(bone);
 
-	this.append(bone);
-
 	return bone;
 }
 
@@ -41,25 +39,26 @@ BoneCollection.prototype.update = function() {
 	}
 };
 
-BoneCollection.prototype.setPosition = function(pos) {
-	this.supr.setPosition.call(this, pos)
-
+BoneCollection.prototype.setPosition = function(x, y) {
+	this.supr.setPosition.call(this, x, y)
 	this.update();
 }
 
+
+//convenience: don't use unless you have to. Using means creating unnessecary objects
 Object.defineProperty(BoneCollection.prototype, "position", {
 	set: BoneCollection.prototype.setPosition,
 	get: function() {
-		return this._position;
+		return this._position.clone();
 	}
 });
 
 BoneCollection.prototype.addBones = function(layout, callback) {
-	var numBones = layout.bones.length,
-		bones = layout.bones;
+	var bones = layout.bones,
+		numBones = bones.length;
+
 	for (var i = 0; i < numBones; i++) {
 		var b = bones[i];
 		this.addBone(b.angle, b.length, b.type, callback).addBones(b, callback);
 	}
-
 };

@@ -14,7 +14,7 @@ UI.RangeSliderControl.prototype.supr = UI.Draggable.prototype;
 
 UI.RangeSliderControl.prototype.onmousemove = function(e, parent) {
 	//parent can be set to true when this funtion is called from a parent
-	if((this.dragging && this.enabled) || parent) {
+	if(this.enabled || parent) {
 		var parent = this.parent,
 			offset = e.pageX - parent.left,
 			value = this.parent.valueAtOffset(offset);
@@ -37,8 +37,6 @@ Object.defineProperty(UI.RangeSliderControl.prototype, "value", {
 		var parent = this.parent;
 
 		this._value = val = Math.min(Math.max(val, parent._min), parent._max);
-
-		//var offset = this.parent.offsetAtValue(val);
 
 		this.left = val / (parent.max - parent.min) * 100;//this.element.clientWidth / 2;
 		this.element.setAttribute("value", (Math.round(val * 100 ) / 100));

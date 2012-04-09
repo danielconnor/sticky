@@ -1,25 +1,20 @@
 function AngleKeyFrameInterval(prev, next, animatable) {
 	if(!prev) return;
 
-	VisibleKeyFrameInterval.call(this, prev, next, animatable);
+	KeyFrameInterval.call(this, "path", prev, next, animatable);
 
 	var interval = this;
-
-	delete this.attr["stroke-dasharray"];
-	this.attr.stroke = "#000";
 
 	this.animatable.addEventListener("anglechange", function() {
 		interval._active && interval.update();
 	});
 
-	
-
 	this.active = false;
 }
 
-AngleKeyFrameInterval.prototype = new VisibleKeyFrameInterval();
+AngleKeyFrameInterval.prototype = new KeyFrameInterval();
 AngleKeyFrameInterval.prototype.constructor = AngleKeyFrameInterval;
-AngleKeyFrameInterval.prototype.supr = VisibleKeyFrameInterval.prototype;
+AngleKeyFrameInterval.prototype.supr = KeyFrameInterval.prototype;
 
 
 AngleKeyFrameInterval.prototype.update = function() {
@@ -37,7 +32,7 @@ AngleKeyFrameInterval.prototype.update = function() {
 		flag = between > 180;
 
 
-	this.attr.path = "M" + pt1.toString() + " A" + length + "," + length + " 0 " + (+!flag) + ",0 " + pt2.toString();
+	this.setAttr("d","M" + pt1.toString() + " A" + length + "," + length + " 0 " + (+!flag) + ",0 " + pt2.toString());
 
 
 	this.supr.update.call(this);
@@ -48,11 +43,10 @@ Object.defineProperty(AngleKeyFrameInterval.prototype, "active", {
 		this._active = !!active;//make sure it's a boolean
 
 		if(active) {
-			this.element.show();
 			this.emit("activate",[]);
 		}
 		else {
-			this.element.hide();
+			//this.element.hide();
 			this.emit("deactivate",[]);
 		}
 

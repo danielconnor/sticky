@@ -1,14 +1,24 @@
-function KeyFrameInterval(prev, next) {
+function KeyFrameInterval(tagName, prev, next, animatable) {
 	if(!prev) return;
+
+	DOMElement.call(this, "http://www.w3.org/2000/svg", tagName);
+
+	this.animatable = animatable;
 
 	this._next = next;
 	this._prev = prev;
 
 	this._active = false;
+
 }
 
-KeyFrameInterval.prototype = new EventEmitter();
+KeyFrameInterval.prototype = new DOMElement();
 KeyFrameInterval.prototype.constructor = KeyFrameInterval;
+KeyFrameInterval.prototype.supr = DOMElement.prototype;
+
+KeyFrameInterval.prototype.update = function() {	
+	this.draw();
+}
 
 Object.defineProperty(KeyFrameInterval.prototype, "next", {
 	get: function() {

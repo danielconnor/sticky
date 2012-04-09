@@ -6,12 +6,15 @@ UI.Control = function(tagName, classes) {
 	this.children = [];
 	this.classList = this.element.classList || new DOMTokenList(this.element);
 
-	for(var i = 0, il = classes.length; i < il; i++) {
-		this.classList.add(classes[i]);
-	}
-	this.classList.add("control");
-
 	this.measurement = "%";
+
+	this.classList.add("control");
+	if(classes) {
+		for(var i = 0, il = classes.length; i < il; i++) {
+			this.classList.add(classes[i]);
+		}
+	}
+
 };
 
 UI.Control.prototype = new DOMElement();
