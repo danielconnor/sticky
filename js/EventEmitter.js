@@ -46,15 +46,6 @@ var EventEmitter = (function() {
       if (!this._events || !this._events.error ||
           (isArray(this._events.error) && !this._events.error.length))
       {
-        if (this.domain) {
-          var er = arguments[1];
-          er.domain_emitter = this;
-          er.domain = this.domain;
-          er.domain_thrown = false;
-          this.domain.emit('error', er);
-          return false;
-        }
-
         if (arguments[1] instanceof Error) {
           throw arguments[1]; // Unhandled 'error' event
         } else {
@@ -69,9 +60,6 @@ var EventEmitter = (function() {
     if (!handler) return false;
 
     if (typeof handler == 'function') {
-      if (this.domain) {
-        this.domain.enter();
-      }
       switch (arguments.length) {
         // fast cases
         case 1:
@@ -90,15 +78,9 @@ var EventEmitter = (function() {
           for (var i = 1; i < l; i++) args[i - 1] = arguments[i];
           handler.apply(this, args);
       }
-      if (this.domain) {
-        this.domain.exit();
-      }
       return true;
 
     } else if (isArray(handler)) {
-      if (this.domain) {
-        this.domain.enter();
-      }
       var l = arguments.length;
       var args = new Array(l - 1);
       for (var i = 1; i < l; i++) args[i - 1] = arguments[i];
@@ -106,9 +88,6 @@ var EventEmitter = (function() {
       var listeners = handler.slice();
       for (var i = 0, l = listeners.length; i < l; i++) {
         listeners[i].apply(this, args);
-      }
-      if (this.domain) {
-        this.domain.exit();
       }
       return true;
 
