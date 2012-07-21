@@ -1,4 +1,8 @@
+/*global util, DOMElement, DOMTokenList*/
+
 UI.Control = (function() {
+  "use strict";
+
   function Control(tagName, classes) {
     DOMElement.call(this, "http://www.w3.org/1999/xhtml", tagName);
 

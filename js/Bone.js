@@ -1,6 +1,7 @@
 /*global util, Point, BoneCollection, AngleKeyFrameInterval, SVGDOMElement*/
 var Bone = (function() {
   "use strict";
+  
   function Bone(parent, angle, length, tagName) {
     BoneCollection.call(this, "g", null);
 

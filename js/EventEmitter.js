@@ -22,10 +22,9 @@
 var EventEmitter = (function() {
   "use strict";
 
-var isArray = Array.isArray;
+  var isArray = Array.isArray;
 
-  function EventEmitter() {
-  }
+  function EventEmitter() {}
 
   // By default EventEmitters will print a warning if more than
   // 10 listeners are added to it. This is a useful default which
