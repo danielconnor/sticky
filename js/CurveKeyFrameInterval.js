@@ -1,103 +1,142 @@
-function CurveKeyFrameInterval(prev, next, animatable) {
-	if(!prev) return;
+/*global util, ControlPoint, Point, KeyFrameInterval, Voodoo, SVGDOMElement*/
 
-	KeyFrameInterval.call(this, "path", prev, next, animatable);
+var CurveKeyFrameInterval = (function() {
+  "use strict";
 
-	var interval = this;
+  function CurveKeyFrameInterval(prev, next, animatable) {
+    KeyFrameInterval.call(this, prev, next, animatable);
 
-	this.totalLength = 0;
+    var interval = this;
 
-	this.controlPoints = [
-		new ControlPoint("path", prev._prop), 
-		new ControlPoint("path", next._prop)
-	];
-	this.controlPointOffsets = [
-		new Point(0,0),
-		new Point(0,0)
-	];
+    this.totalLength = 0;
+    this.active = false;
+    this.handleUpdate = this.handleUpdate.bind(this);
 
-	this.voodoos = [
-		new Voodoo(this.controlPoints[0]),
-		new Voodoo(this.controlPoints[1])
-	];
+    this.prevControlPoint = new ControlPoint("path", prev._prop);
+    this.nextControlPoint = new ControlPoint("path", next._prop);
 
-	this.voodoos[0].color = this.voodoos[1].color = "#007800";
-
-	this.handleUpdate = this.handleUpdate.bind(this);
-
-	this.controlPoints[0].addEventListener("change", this.handleUpdate);
-	this.controlPoints[1].addEventListener("change", this.handleUpdate);
-
-	this.update();
-	this.active = false;
-
-	this.setAttr("stroke", "#000");
-	this.setAttr("fill", "none");
-	this.setAttr("stroke-dasharray", "- -");
-
-	document.getElementsByTagName("svg")[0].appendChild(this.element);
-	document.getElementsByTagName("svg")[0].appendChild(this.voodoos[0].element);
-	document.getElementsByTagName("svg")[0].appendChild(this.voodoos[1].element);
-	document.getElementsByTagName("svg")[0].appendChild(this.controlPoints[0].element);
-	document.getElementsByTagName("svg")[0].appendChild(this.controlPoints[1].element);
-}
-CurveKeyFrameInterval.prototype = new KeyFrameInterval();
-CurveKeyFrameInterval.prototype.constructor = CurveKeyFrameInterval;
-CurveKeyFrameInterval.prototype.supr = KeyFrameInterval.prototype;
+    this.prevControlPoint.addEventListener("change", this.handleUpdate);
+    this.nextControlPoint.addEventListener("change", this.handleUpdate);
 
 
+    this.prevOffset = new Point(0,0);
+    this.nextOffset = new Point(0,0);
+    
+    this.prevVoodoo = new Voodoo(this.prevControlPoint);
+    this.nextVoodoo = new Voodoo(this.nextControlPoint);
 
-CurveKeyFrameInterval.prototype.handleUpdate = function() {
-	var cp = this.controlPoints,
-		cpo = this.controlPointOffsets;
+    this.prevVoodoo.color = this.nextVoodoo.color = "#007800";
 
-	cpo[0] = this.prev._prop.subtract(cp[0]._position);
-	cpo[1] = this.next._prop.subtract(cp[1]._position);
+    this.lengthDisplay = new SVGDOMElement("text");
+    this.lengthDisplayContent = new SVGDOMElement("textPath");
+    this.lengthDisplayContent.target(this.path);
+    this.lengthDisplay.append(this.lengthDisplayContent);
+    this.lengthDisplay.setAttr("font-size", "12px");
 
-	this.update();
-	this.emit("change",[]);
-}
-
-CurveKeyFrameInterval.prototype.update = function() {
-	var cp = this.controlPoints;
-
-	cp[0].position = this.prev._prop.subtract(this.controlPointOffsets[0]);
-	cp[1].position = this.next._prop.subtract(this.controlPointOffsets[1]);
-
-	cp[0].setAttr("d", "M" + this._prev._prop.toString() + "L" + cp[0]._position.toString());
-	cp[1].setAttr("d", "M" + this._next._prop.toString() + "L" + cp[1]._position.toString());
+    this.lengthDisplayContent.setAttrs({
+      "anchor": "middle",
+      "startOffset": "50%"
+    });
+    this.path.setAttrs({
+      "stroke": "#000",
+      "fill": "none",
+      "stroke-dasharray": "3,4"
+    });
 
 
-	this.setAttr("d", "M" + this._prev._prop.toString() + 
-		"C" + cp[0]._position.mirror(this._prev._prop).toString() + " " + cp[1]._position.mirror(this._next._prop).toString() + " " + this._next._prop.toString());
+    this.update();
 
-	this.totalLength = this.element.getTotalLength();
-};
+    this.append(this.prevControlPoint);
+    this.append(this.nextControlPoint);
+    this.append(this.prevVoodoo);
+    this.append(this.nextVoodoo);
 
-CurveKeyFrameInterval.prototype.getInterval = function(time) {
-	return this.element.getPointAtLength((time - this._prev.time) / (this._next.time - this._prev.time) * this.totalLength);;
-};
+    this.append(this.lengthDisplay);
 
-CurveKeyFrameInterval.prototype.remove = function() {
-	this.supr.remove.call(this);
+    document.getElementsByTagName("svg")[0].appendChild(this.element);
+  }
 
-	this.controlConnections[0].remove();
-	this.controlConnections[1].remove();
-	this.voodoos[0].remove();
-	this.voodoos[1].remove();
-};
+  util.inherits(CurveKeyFrameInterval, KeyFrameInterval);
 
-Object.defineProperty(CurveKeyFrameInterval.prototype, "active", {
-	set: function(active) {
-		this._active = !!active;//make sure it's a boolean
+  CurveKeyFrameInterval.prototype.handleUpdate = function() {
+    var prev = this.prev._prop,
+      next = this.next._prop,
+      pO = this.prevOffset,
+      nO = this.nextOffset,
+      pC = this.prevControlPoint._position,
+      nC = this.nextControlPoint._position;
 
-		if(active) {
-			//this.attr.stroke = "#000";
-			this.emit("activate",[]);
-		}
-		else {
-			//this.attr.stroke = "#aaa"
-			this.emit("deactivate",[]);
-		}
-	}
-});
+    pO.x = prev.x - pC.x;
+    pO.y = prev.y - pC.y;
+
+    nO.x = next.x - nC.x;
+    nO.y = next.y - nC.y;
+
+    this.update();
+    this.emit("change");
+  };
+
+  CurveKeyFrameInterval.prototype.update = function() {
+      var prev = this.prev._prop,
+      next = this.next._prop,
+      pO = this.prevOffset,
+      nO = this.nextOffset,
+      pC = this.prevControlPoint,
+      nC = this.nextControlPoint,
+      path = this.path;
+
+    pC.setPosition(prev.x - pO.x, prev.y - pO.y);
+    nC.setPosition(next.x - nO.x, next.y - nO.y);
+
+    pC.setAttr("d", "M" + prev.toString() + "L" + pC._position.toString());
+    nC.setAttr("d", "M" + next.toString() + "L" + nC._position.toString());
+
+    path.setAttr("d",
+      "M" + prev.toString() +
+      "C" + pC._position.mirror(prev).toString() +
+      " " + nC._position.mirror(next).toString() +
+      " " + next.toString()
+    );
+
+    this.totalLength = path.element.getTotalLength();
+
+    this.lengthDisplayContent.element.textContent = this.totalLength.toFixed(0);
+
+  };
+
+  CurveKeyFrameInterval.prototype.getInterval = function(time) {
+    return this.path.element.getPointAtLength((time - this._prev.time) / (this._next.time - this._prev.time) * this.totalLength).clone();
+  };
+
+  CurveKeyFrameInterval.prototype.remove = function() {
+    this.supr.remove.call(this);
+  };
+
+  CurveKeyFrameInterval.prototype.getTransform = function() {
+    var transform = new SVGDOMElement("animateMotion");
+
+    transform.setAttr("fill", "freeze");
+    transform.setAttr("path", this.path.getAttr("d"));
+    transform.setAttr("dur", (this._next._value - this._prev._value) / 1000 + "s");
+
+    return transform;
+  };
+
+  Object.defineProperty(CurveKeyFrameInterval.prototype, "active", {
+    set: function(active) {
+      // make sure it's a boolean
+      this._active = !!active;
+
+      if(active) {
+        this.path.setAttr("stroke", "#000");
+        this.emit("activate");
+      }
+      else {
+        this.path.setAttr("stroke", "#aaa");
+        this.emit("deactivate");
+      }
+    }
+  });
+
+  return CurveKeyFrameInterval;
+})();

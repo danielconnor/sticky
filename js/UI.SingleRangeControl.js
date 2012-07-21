@@ -8,7 +8,7 @@ UI.SingleRangeControl = function(value, max, min) {
 	this.append(this.slider);
 
 	this.slider.addEventListener("change", function(e) {
-		rangeControl.emit("change",[]);
+		rangeControl.emit("change");
 	});
 
 	this.handle("DOMNodeInserted");
@@ -18,11 +18,11 @@ UI.SingleRangeControl = function(value, max, min) {
 }
 UI.SingleRangeControl.prototype = new UI.RangeControl();
 UI.SingleRangeControl.prototype.constructor = UI.SingleRangeControl;
-UI.SingleRangeControl.prototype.supr = UI.RangeControl;
+UI.SingleRangeControl.prototype.supr = UI.RangeControl.prototype;
 
-UI.SingleRangeControl.prototype.onmousedown = function(e) {
-	this.slider.onmousedown(e);
-	this.slider.onmousemove(e, true);
+UI.SingleRangeControl.prototype.mousedown = function(e) {
+	this.slider.mousedown(e);
+	this.slider.mousemove(e, true);
 	return false;
 };
 
@@ -34,7 +34,6 @@ Object.defineProperty(UI.SingleRangeControl.prototype, "value", {
 		this.slider.value = val;
 	}
 });
-UI.SingleRangeControl.prototype.onDOMNodeInserted = function() {
+UI.SingleRangeControl.prototype.DOMNodeInserted = function() {
 	this.slider.value = this.slider._value;
-	console.log(this.element.clientWidth)
-}
+};

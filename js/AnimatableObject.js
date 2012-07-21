@@ -1,19 +1,18 @@
+/*global util, ControlPoint CurveKeyFrameInterval*/
 
-/*
-* description: 
-* events: positionchange
-*/
+var AnimatableObject = (function() {
+  "use strict";
 
-function AnimatableObject(tagName, position /*Point*/) {
-	if(!tagName) return;
+  function AnimatableObject(tagName, position) {
+    ControlPoint.call(this, tagName, position);
 
-	ControlPoint.call(this, tagName, position);
+    this.properties = [];
 
-	this.properties = [];
+  }
 
-}
+  util.inherits(AnimatableObject, ControlPoint);
 
-AnimatableObject.prototype = new ControlPoint();
-AnimatableObject.prototype.constructor = AnimatableObject;
+  AnimatableObject.prototype.intervalConstructor = CurveKeyFrameInterval;
 
-AnimatableObject.prototype.intervalConstructor = CurveKeyFrameInterval;
+  return AnimatableObject;
+})();

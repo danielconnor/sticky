@@ -1,46 +1,55 @@
-UI.Draggable = function(tagName, classes) {
-	UI.Control.call(this, tagName, classes);
+/*global util, UI, Point*/
 
-	if(!tagName) return;
+UI.Draggable = (function() {
+	"use strict";
 
-	this.parent = parent;
-	this.offset = new Point();
+	function Draggable(tagName, classes) {
+		UI.Control.call(this, tagName, classes);
 
-	this.handle("mousedown");
-	this.handle("dragstart");
-	this.handle("selectstart");
+		if(!tagName) return;
 
-	this.onmv = this.onmousemove.bind(this);
+		this.parent = parent;
+		this.offset = new Point();
 
-	document.addEventListener("mouseup", this.onmouseup.bind(this), false);
-}
+		this.handle("mousedown");
+		this.handle("dragstart");
+		this.handle("selectstart");
 
-UI.Draggable.prototype = new UI.Control();
-UI.Draggable.prototype.constructor = UI.Draggable;
+		this.mousemove = this.mousemove.bind(this);
+		this.mouseup = this.mouseup.bind(this);
 
-UI.Draggable.prototype.onmousemove = function(e) {
-	this.emit("drag", [this, e]);
-	e.preventDefault();
-	e.stopPropagation();
-	return false;
-};
+	}
 
-UI.Draggable.prototype.onmousedown = function(e) {
-	this.offset.x = e.pageX - this.left
-	this.offset.y = e.pageY - this.top;
-	
-	document.addEventListener("mousemove", this.onmv, false);
-};
+	util.inherits(Draggable, UI.Control);
+
+	var _proto = Draggable.prototype,
+		_super = UI.Control.prototype;
+
+	_proto.mousemove = function(e) {
+		this.emit("drag", this, e);
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	};
+
+	_proto.mousedown = function(e) {
+		this.offset.x = e.pageX - this.left;
+		this.offset.y = e.pageY - this.top;
+		document.addEventListener("mousemove", this.mousemove, false);
+		document.addEventListener("mouseup", this.mouseup, false);
+	};
 
 
-UI.Draggable.prototype.onmouseup = function(e) {
-	document.removeEventListener("mousemove", this.onmv);
-};
+	_proto.mouseup = function(e) {
+		document.removeEventListener("mousemove", this.mousemove);
+	};
 
+	_proto.dragstart =
+	_proto.selectstart = function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
+	};
 
-UI.Draggable.prototype.ondragstart =
-UI.Draggable.prototype.onselectstart = function(e) {
-	e.stopPropagation();
-	e.preventDefault();
-	return false;
-}
+	return Draggable;
+})();

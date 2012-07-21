@@ -1,4 +1,5 @@
 UI.RangeSliderControl = function(parent, enabled) {
+	if(!parent) return;
 	UI.Draggable.call(this, "div", ["range-slider-control"]);
 
 	this.enabled = enabled !== undefined ? enabled : true;
@@ -12,7 +13,7 @@ UI.RangeSliderControl.prototype = new UI.Draggable();
 UI.RangeSliderControl.prototype.constructor = UI.RangeSliderControl;
 UI.RangeSliderControl.prototype.supr = UI.Draggable.prototype;
 
-UI.RangeSliderControl.prototype.onmousemove = function(e, parent) {
+UI.RangeSliderControl.prototype.mousemove = function(e, parent) {
 	//parent can be set to true when this funtion is called from a parent
 	if(this.enabled || parent) {
 		var parent = this.parent,
@@ -20,14 +21,14 @@ UI.RangeSliderControl.prototype.onmousemove = function(e, parent) {
 			value = this.parent.valueAtOffset(offset);
 
 		this._value = value;
-			
+
 		this.left = value / (parent.max - parent.min) * 100;
 
 		this.element.setAttribute("value", value.toFixed(2));
 
-		this.emit("change", [this]);
+		this.emit("change", this);
 	}
-	return this.supr.onmousemove.call(this,e);
+	return this.supr.mousemove.call(this,e);
 };
 Object.defineProperty(UI.RangeSliderControl.prototype, "value", {
 	get: function() {
@@ -38,9 +39,9 @@ Object.defineProperty(UI.RangeSliderControl.prototype, "value", {
 
 		this._value = val = Math.min(Math.max(val, parent._min), parent._max);
 
-		this.left = val / (parent.max - parent.min) * 100;//this.element.clientWidth / 2;
+		this.left = val / (parent.max - parent.min) * 100;
 		this.element.setAttribute("value", (Math.round(val * 100 ) / 100));
 
-		this.emit("change", [this]);
+		this.emit("change", this);
 	}
 });

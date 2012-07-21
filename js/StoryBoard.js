@@ -1,71 +1,81 @@
-function StoryBoard(screen) {
-	UI.Control.call(this, "div", ["storyboard"]);
-	var storyboard = this;
+/*global util, UI, DOMElement*/
 
-	this.objects = [];
-	this.screenContainer = new UI.Control("div");
-	this.screen = new DOMElement("http://www.w3.org/2000/svg", "svg");
+var StoryBoard = (function() {
+	"use strict";
 
-	this.screenContainer.append(this.screen);
+	function StoryBoard(screen) {
+		UI.Control.call(this, "div", ["storyboard"]);
+		var storyboard = this;
 
-	this.append(this.screenContainer);
+		this.objects = [];
+		this.screenContainer = new UI.Control("div");
+		this.screen = new DOMElement("http://www.w3.org/2000/svg", "svg");
 
+		this.screenContainer.append(this.screen);
 
-
-	this.controls = new UI.Window("Controls");
-	this.controls.element.id = "controls";
-	this.append(this.controls);
-
-	this._length = 1000;
-
-	this.progress = new UI.Progress(this._length);
+		this.append(this.screenContainer);
 
 
-	this.controls.append(this.progress);
 
-	this.keyFrames = new UI.Control("div",["keyframes"]);
-	this.controls.append(this.keyFrames);
+		this.controls = new UI.Window("Controls");
+		this.controls.element.id = "controls";
+		this.append(this.controls);
 
-	this.progress.addEventListener("change", function() {
-		var children = storyboard.keyFrames.children;
+		this._length = 1000;
 
-		for(var i = 0, il = children.length; i < il; i++) {
-			children[i].setCurrent(this.value);
+		this.progress = new UI.Progress(this._length);
+
+		this.controls.append(this.progress);
+
+		this.keyFrames = new UI.Control("div",["keyframes"]);
+		this.controls.append(this.keyFrames);
+
+		this.progress.addEventListener("change", function() {
+			var children = storyboard.keyFrames.children;
+
+			for(var i = 0, il = children.length; i < il; i++) {
+				children[i].setCurrent(this.value);
+			}
+		});
+	}
+
+	util.inherits(StoryBoard, UI.Control);
+
+	var _proto = StoryBoard.prototype,
+		_super = UI.Control.prototype;
+
+	_proto.addObject = function(obj) {
+		var storyboard = this;
+
+		obj.length = this._length;
+
+		this.objects.push(obj);
+
+		obj.timelineCollection.addEventListener("currentchange", function(current) {
+			storyboard.progress.value = current;
+		});
+
+		this.screen.append(obj.obj);
+		this.screen.append(obj.voodoo);
+		var voodoos = obj.voodoos;
+		for(var i = 0; i < voodoos.length; i++) {
+			this.screen.append(voodoos[i]);
+		}
+
+		this.keyFrames.append(obj.timelineCollection);
+	};
+
+	Object.defineProperty(_proto, "length", {
+		get: function() {
+			return this._length;
+		},
+		set: function(length) {
+			this._length = length;
+			this.progress.length = length;
+
+			this.emit("lengthchange");
 		}
 	});
-}
-StoryBoard.prototype = new UI.Control();
-StoryBoard.prototype.constructor = StoryBoard;
 
-StoryBoard.prototype.addObject = function(obj) {
-	var storyboard = this;
-
-	obj.length = this._length;
-
-	this.objects.push(obj);
-
-	obj.timelineCollection.addEventListener("currentchange", function(current) {
-		storyboard.progress.value = current;
-	});
-
-	this.screen.append(obj.obj);
-	this.screen.append(obj.voodoo);
-	var voodoos = obj.voodoos;
-	for(var i =0; i < voodoos.length; i++) {
-		this.screen.append(voodoos[i]);
-	}
-
-	this.keyFrames.append(obj.timelineCollection);
-};
-
-Object.defineProperty(StoryBoard.prototype, "length", {
-	get: function() {
-		return this._length;
-	},
-	set: function(length) {
-		this._length = length;
-		this.progress.length = length;
-
-		this.emit("lengthchange", []);
-	}
-});
+	return StoryBoard;
+})();

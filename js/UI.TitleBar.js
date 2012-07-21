@@ -1,21 +1,28 @@
-UI.TitleBar = function(title) {
-	UI.Draggable.call(this, "div", ["titlebar"]);
-	this.title = title;
+/*global util, UI*/
 
-	this.measure
-}
+UI.TitleBar = (function() {
+  "use strict";
 
-UI.TitleBar.prototype = new UI.Draggable();
-UI.TitleBar.prototype.constructor = UI.TitleBar;
-UI.TitleBar.prototype.supr = UI.Draggable.prototype;
+  function TitleBar(title) {
+    UI.Draggable.call(this, "div", ["titlebar"]);
+    this.title = title;
 
+  }
 
+  util.inherits(TitleBar, UI.Draggable);
 
-Object.defineProperty(UI.TitleBar.prototype, "title", {
-	get: function() {
-		return this._title;
-	},
-	set: function(title) {
-		this._title = this.element.textContent = title;
-	}
-});
+  var _proto = TitleBar.prototype,
+    _super = UI.Draggable.prototype;
+
+  Object.defineProperty(_proto, "title", {
+    get: function() {
+      return this._title;
+    },
+    set: function(title) {
+      this._title = this.element.textContent = title;
+    }
+  });
+
+  return TitleBar;
+
+})();

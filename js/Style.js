@@ -10,7 +10,7 @@
 			rulePos = Array.prototype.indexOf.call(parent.rules, this);
 
 		if(rulePos > -1) {
-			parent.removeRule()
+			parent.removeRule();
 		}
 	};
 

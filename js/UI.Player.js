@@ -3,5 +3,4 @@ UI.Player = function() {
 	this.timelines = [];
 };
 
-UI.Player.prototype = new UI.Control();
-UI.Player.prototype.constructor = UI.Player;
+util.inherits(UI.Player, UI.Control);

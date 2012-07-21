@@ -1,3 +1,3 @@
-Objects = {
+var Objects = {
 	C:{}
 };

@@ -1,82 +1,103 @@
-function Bone(parent, angle, length, tagName) {
-	if(!parent) return;
+/*global util, Point, BoneCollection, AngleKeyFrameInterval, SVGDOMElement*/
+var Bone = (function() {
+  "use strict";
+  function Bone(parent, angle, length, tagName) {
+    BoneCollection.call(this, "g", null);
 
-	BoneCollection.call(this, tagName || "path", null);
-	var bone = this;
+    this._length = length;
+    this.parent = parent;
+    this._angle = angle;
 
-	this._angle = angle;
-	this._length = length;
-	this.parent = parent;
+    this.marrow = new SVGDOMElement(tagName || "path");
+    this.marrow.bone = this;
 
-	this.handle("click");
+    this.append(this.marrow);
 
-	this.update();
-}
-Bone.prototype = new BoneCollection();
-Bone.prototype.constructor = Bone;
-Bone.prototype.supr = BoneCollection.prototype;
+    this.handle("click");
 
-Bone.prototype.intervalConstructor = AngleKeyFrameInterval;
 
-Bone.prototype.setPosition = function(x, y) {
-	if(typeof x === "object") {
-		y = x.y;
-		x = x.x;
-	}
-	this.angle = this.parent._position.angleBetween(x,y) * 180 / Math.PI;
-};
+    this.staticEndpoint.addSelf(parent.staticEndpoint.x + length, parent.staticEndpoint.y);
 
-//convenience: don't use unless you have to. Using means creating unnessecary objects
-Object.defineProperty(Bone.prototype, "position", {
-	set: Bone.prototype.setPosition
-});
+    this.draw();
+    this.update();
+  }
 
-Object.defineProperty(Bone.prototype,"angle", {
-	get:function() {
-		return this._angle;
-	},
-	set: function(a) {
-		if(this._angle != a) {
-			this._angle = a;
-			this.emit("anglechange", []);
-			this.update();
-		}
-	}
-});
-Object.defineProperty(Bone.prototype,"length", {
-	get:function() {
-		return this._length;
-	},
-	set: function(l) {
-		if(this._length != l) {
-			this._length = l;
-			this.emit("lengthchange", []);
-			this.update();
-		}
-	}
-});
+  util.inherits(Bone, BoneCollection);
 
-/*** methods ***/
-Bone.prototype.update = function() {
-	var parentPos = this.parent._position,
-		pos = this._position,
-		radians = this._angle * 3.14 / 180,
-		len = this._length;
+  var _proto = Bone.prototype,
+    _super = BoneCollection.prototype;
 
-	pos.x = len * Math.cos(radians) + parentPos.x;
-	pos.y = len * Math.sin(radians) + parentPos.y;
+  _proto.intervalConstructor = AngleKeyFrameInterval;
 
-	this.draw();
-	
-	this.supr.update.call(this);
+  _proto.setPosition = function(x, y) {
+    if(typeof x === "object") {
+      y = x.y;
+      x = x.x;
+    }
+    this.angle = this.parent._position.angleBetween(x,y) * 180 / Math.PI - (this.parent.relativeAngle || 0);
+  };
 
-	this.emit("change", []);
-};
+  Object.defineProperty(_proto,"relativeAngle", {
+    get:function() {
+      return this._angle + (this.parent.relativeAngle || 0);
+    }
+  });
 
-Bone.prototype.draw = function() {
-	this.element.setAttribute("d", "M" + this.parent._position.toString() + "L" + this._position.toString());
-}
+  Object.defineProperty(_proto,"angle", {
+    get:function() {
+      return this._angle;
+    },
+    set: function(a) {
+      if(this._angle != a) {
+        this._angle = a;
+        this.emit("anglechange");
+        this.update();
+      }
+    }
+  });
+  Object.defineProperty(_proto,"length", {
+    get:function() {
+      return this._length;
+    },
+    set: function(l) {
+      if(this._length != l) {
+        this._length = l;
+        this.emit("lengthchange");
+        this.update();
+      }
+    }
+  });
 
-Bone.prototype.onclick = function(e) {
+  _proto.updateTransform = function() {
+    this.setAttr("transform", "rotate(" + this.angle + "," + this.parent.staticEndpoint + ")");
+  };
 
-};
+  _proto.update = function() {
+    var parentPos = this.parent._position,
+      pos = this._position,
+      radians = this.relativeAngle * 3.14 / 180,
+      len = this._length;
+
+    pos.x = len * Math.cos(radians) + parentPos.x;
+    pos.y = len * Math.sin(radians) + parentPos.y;
+
+    _super.update.call(this);
+
+    this.emit("change");
+  };
+
+  _proto.click = function(e) {};
+
+  _proto.draw = function() {
+    this.marrow.setAttr("d", "M" + this.parent.staticEndpoint + "L" + this.staticEndpoint);
+  };
+
+  _proto.clone = function(deep) {
+    var clone = _super.clone.call(this, deep);
+    
+    clone.removeAttr("transform");
+    return clone;
+  };
+
+  return Bone;
+})();

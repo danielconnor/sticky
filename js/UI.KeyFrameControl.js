@@ -1,77 +1,83 @@
-UI.KeyFrameControl = function(parent, property, time, enabled) {
-	UI.RangeSliderControl.call(this, parent, enabled);
+/*global util, UI*/
 
-	if(!arguments[0]) return;
+UI.KeyFrameControl = (function() {
+  "use strict";
 
-	this.classList.add("keyframe");
+  function KeyFrameControl(parent, property, time, enabled) {
+    UI.RangeSliderControl.call(this, parent, enabled);
 
-	this._prop = property || {};
-	this.value = time;
-	this._active = false;
+    this.classList.add("keyframe");
 
-	//even though the keyframes are stored in an array it is helpful to keep a reference
-	//to the next and previous keyframes in the list rather than searching for them 
-	//each time they need to be accessed
-	this.next = null;
-	this.prev = null;
+    this._prop = property === undefined ? 0 : property;
+    this.value = time;
+    this._active = false;
 
-	this.addEventListener("change", function() {
-		this.emit("timechange");
-	});
+    //even though the keyframes are stored in an array it is helpful to keep a reference
+    //to the next and previous keyframes in the list rather than searching for them
+    //each time they need to be accessed
+    this.next = null;
+    this.prev = null;
 
-	this.handle("click");
-};
+    this.addEventListener("change", function() {
+      this.emit("timechange");
+    });
 
-UI.KeyFrameControl.prototype = new UI.RangeSliderControl();
-UI.KeyFrameControl.prototype.constructor = UI.KeyFrameControl;
+    this.handle("click");
+  }
 
+  util.inherits(KeyFrameControl, UI.RangeSliderControl);
 
-UI.KeyFrameControl.prototype.onclick = function(e) {
-	this.emit("select", [e]);
-};
+  var _proto = KeyFrameControl.prototype,
+    _super = UI.RangeSliderControl.prototype;
 
-Object.defineProperty(UI.KeyFrameControl.prototype, "prop", {
-	get: function() {
-		return this._prop;
-	},
-	set: function(property) {
+  _proto.click = function(e) {
+    this.emit("select", e);
+  };
 
-		this._prop = property;
+  Object.defineProperty(_proto, "prop", {
+    get: function() {
+      return this._prop;
+    },
+    set: function(property) {
+      this._prop = property;
 
-		this.emit("propchange", []);
-	}
-});
+      this.emit("propchange");
+    }
+  });
 
-Object.defineProperty(UI.KeyFrameControl.prototype, "active", {
-	get: function() {
-		return this._active;
-	},
-	set: function(active) {
+  Object.defineProperty(_proto, "active", {
+    get: function() {
+      return this._active;
+    },
+    set: function(active) {
 
-		this._active = active;
+      this._active = active;
 
-		if(active) {
-			this.classList.add("active");
-			this.emit("activate", []);
-		}
-		else {
-			this.classList.remove("active");
-			this.emit("deactivate", []);
-		}
-	}
-});
+      if(active) {
+        this.classList.add("active");
+        this.emit("activate");
+      }
+      else {
+        this.classList.remove("active");
+        this.emit("deactivate");
+      }
+    }
+  });
 
-//TODO: get rid of this. Left for compatability reasons 
-Object.defineProperty(UI.KeyFrameControl.prototype, "time", {
-	get: function() {
-		return this._value;
-	},
-	set: function(time) {
+  //TODO: get rid of this. Left for compatability reasons
+  Object.defineProperty(_proto, "time", {
+    get: function() {
+      return this._value;
+    },
+    set: function(time) {
 
-		this.value = time;
-	}
-});
+      this.value = time;
+    }
+  });
 
-UI.KeyFrameControl.sort = function(k1, k2) {
-	return k1._time - k2._time;
-}
+  _proto.sort = function(k1, k2) {
+    return k1._time - k2._time;
+  };
+
+  return KeyFrameControl;
+})();
