@@ -1,6 +1,6 @@
 (function() {
-  var styleContainer = document.head.appendChild(document.createElement("style"));
-    styleSheets = document.styleSheets
+  var styleContainer = document.head.appendChild(document.createElement("style")),
+    styleSheets = document.styleSheets,
     styleSheetCount  = styleSheets.length - 1,
     stylesheet = document.styleSheets[styleSheetCount++];
 
