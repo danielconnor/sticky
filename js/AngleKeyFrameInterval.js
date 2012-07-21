@@ -97,6 +97,7 @@ var AngleKeyFrameInterval = (function() {
     transform.setAttr("attributeName", "transform");
     transform.setAttr("from", this._prev._prop + " " + pos.x + " " + pos.y);
     transform.setAttr("to", this._next._prop + " " + pos.x + " " + pos.y);
+    transform.setAttr("begin", this._prev._value / 1000 + "s");
     transform.setAttr("dur", (this._next._value - this._prev._value) / 1000 + "s");
 
     return transform;

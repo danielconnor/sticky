@@ -9,7 +9,6 @@ var CurveKeyFrameInterval = (function() {
     var interval = this;
 
     this.totalLength = 0;
-    this.active = false;
     this.handleUpdate = this.handleUpdate.bind(this);
 
     this.prevControlPoint = new ControlPoint("path", prev._prop);
@@ -33,6 +32,9 @@ var CurveKeyFrameInterval = (function() {
     this.lengthDisplay.append(this.lengthDisplayContent);
     this.lengthDisplay.setAttr("font-size", "12px");
 
+    this.prevControlPoint.setAttr("stroke", "#000");
+    this.nextControlPoint.setAttr("stroke", "#000");
+
     this.lengthDisplayContent.setAttrs({
       "anchor": "middle",
       "startOffset": "50%"
@@ -44,6 +46,7 @@ var CurveKeyFrameInterval = (function() {
     });
 
 
+    this.active = false;
     this.update();
 
     this.append(this.prevControlPoint);
@@ -117,6 +120,7 @@ var CurveKeyFrameInterval = (function() {
 
     transform.setAttr("fill", "freeze");
     transform.setAttr("path", this.path.getAttr("d"));
+    transform.setAttr("begin", this._prev._value / 1000 + "s");
     transform.setAttr("dur", (this._next._value - this._prev._value) / 1000 + "s");
 
     return transform;
@@ -128,10 +132,12 @@ var CurveKeyFrameInterval = (function() {
       this._active = !!active;
 
       if(active) {
+        this.lengthDisplay.show();
         this.path.setAttr("stroke", "#000");
         this.emit("activate");
       }
       else {
+        this.lengthDisplay.hide();
         this.path.setAttr("stroke", "#aaa");
         this.emit("deactivate");
       }

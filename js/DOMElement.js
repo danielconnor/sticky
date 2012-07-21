@@ -35,6 +35,14 @@ var DOMElement = (function() {
     }
   };
 
+  _proto.hide = function() {
+    this.element.style.display = "none";
+  };
+
+  _proto.show = function() {
+    this.element.style.display = "block";
+  };
+
   _proto.remove = function(element) {
     this.children.splice(this.children.indexOf(element), 1);
     this.element.removeChild(element.element);
@@ -86,7 +94,7 @@ var DOMElement = (function() {
     get: function() {
       var id = this.getAttr("id");
       if(!id) {
-        id = this.id = "aaaa" + last_id + "aaaa";
+        id = this.id = "0-_-0" + (++last_id) + "0-_-0";
       }
       return id;
     },
@@ -115,6 +123,8 @@ var DOMElement = (function() {
       }
     }
 
+    // the clone event gives a listener an oportunity to
+    // add stuff to the cloned element
     this.emit("clone", cloned);
 
     return cloned;

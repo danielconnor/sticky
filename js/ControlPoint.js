@@ -6,8 +6,6 @@ var ControlPoint = (function() {
   function ControlPoint(tagName, position) {
     SVGDOMElement.call(this, tagName);
     
-    this.setAttr("stroke", "#000");
-
     //always make sure that we create a _position object that is going to be exclusive
     //to this control point. i.e. so that if position is modified in another part of the
     //program inadvertently this position will not me modifed

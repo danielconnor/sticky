@@ -89,15 +89,10 @@ var Bone = (function() {
   _proto.click = function(e) {};
 
   _proto.draw = function() {
+    this.marrow.setAttr("stroke", "#000000");
     this.marrow.setAttr("d", "M" + this.parent.staticEndpoint + "L" + this.staticEndpoint);
   };
 
-  _proto.clone = function(deep) {
-    var clone = _super.clone.call(this, deep);
-    
-    clone.removeAttr("transform");
-    return clone;
-  };
 
   return Bone;
 })();

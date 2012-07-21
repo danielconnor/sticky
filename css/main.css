@@ -7,6 +7,11 @@ body, html {
 	position: relative;
 }
 
+svg {
+	width: 100%;
+	height: 100%;
+}
+
 #screen, #controls {
 	width: 100%;
 	display: block;

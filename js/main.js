@@ -5,11 +5,13 @@
 
   var WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight,
-    storyboard = new StoryBoard();
+    storyboard = new StoryBoard(WIDTH, HEIGHT, 1000);
 
   window.addEventListener("resize", function() {
     WIDTH = window.innerWidth;
     HEIGHT = window.innerHeight;
+
+    storyboard.updateDimensions(WIDTH, HEIGHT);
   }, false);
 
   document.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);

@@ -6,7 +6,6 @@ var Skull = (function() {
   function Skull(parent, angle, radius) {
     Bone.call(this, parent, angle, radius, "circle");
 
-    this.marrow.setAttr("fill", "none");
 
     this.update();
   }
@@ -15,6 +14,8 @@ var Skull = (function() {
 
   Skull.prototype.draw = function() {
     var marrow = this.marrow;
+    marrow.setAttr("fill", "none");
+    marrow.setAttr("stroke", "#000000");
     marrow.setAttr("cx", this.staticEndpoint.x);
     marrow.setAttr("cy", this.staticEndpoint.y);
     marrow.setAttr("r", this._length);
