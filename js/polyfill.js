@@ -33,7 +33,7 @@ window.DOMTokenList = window.DOMTokenList || (function() {
     };
     DOMTokenList.prototype.toggle = function(className) {
       var loc = this.indexOf(className),
-          contains = loc > -1;
+        contains = loc > -1;
 
       if(contains) {
         this.splice(loc, 1);

@@ -1,5 +1,4 @@
 /*global util, KeyFrameInterval, Point, SVGDOMElement*/
-
 var AngleKeyFrameInterval = (function() {
   "use strict";
 

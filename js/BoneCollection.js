@@ -1,5 +1,4 @@
 /*global util, Point, AnimatableObject, Bone, Skull*/
-
 var BoneCollection = (function() {
   "use strict";
 

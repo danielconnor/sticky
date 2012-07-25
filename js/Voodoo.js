@@ -1,21 +1,18 @@
-/*global util, Point, DOMElement */
-
+/*global util, Point, SVGDOMElement */
 var Voodoo = (function() {
   "use strict";
 
   function Voodoo(obj) {
-    DOMElement.call(this,"http://www.w3.org/2000/svg", "circle");
+    SVGDOMElement.call(this, "circle");
 
     this.obj = obj;
 
     this.size = 4;
     this.color = "#fff";
+    this.parent = parent;
+    this.offset = null;
 
     this.obj.addEventListener("change", this.update.bind(this));
-
-    this.parent = parent;
-
-    this.offset = null;
 
     this.handle("mousedown");
     this.handle("dragstart");
@@ -30,10 +27,10 @@ var Voodoo = (function() {
     this.update();
   }
 
-  util.inherits(Voodoo, DOMElement);
+  util.inherits(Voodoo, SVGDOMElement);
 
   var _proto = Voodoo.prototype,
-    _super = DOMElement.prototype;
+    _super = SVGDOMElement.prototype;
 
   _proto.update = function() {
     var pos = this.obj._position;
@@ -61,8 +58,6 @@ var Voodoo = (function() {
   _proto.mousemove = function(e) {
     this.emit("drag", this, e);
 
-    //instead of creating a new object we'll be more efficient
-    //this.obj.position = new Point(e.pageX, e.pageY);
     this.obj.setPosition(e.pageX, e.pageY);
 
     e.preventDefault();

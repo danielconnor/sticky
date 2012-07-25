@@ -1,5 +1,4 @@
-/*global util, UI, DOMElement*/
-
+/*global util, UI, SVGDOMElement, Blob, webkitURL*/
 var StoryBoard = (function() {
   "use strict";
 
@@ -9,7 +8,7 @@ var StoryBoard = (function() {
 
     this.objects = [];
     this.screenContainer = new UI.Control("div");
-    this.screen = new DOMElement("http://www.w3.org/2000/svg", "svg");
+    this.screen = new SVGDOMElement("svg");
     this.updateDimensions(width, height);
     
     this.screenContainer.append(this.screen);
@@ -57,6 +56,7 @@ var StoryBoard = (function() {
     this.screen.append(obj.obj);
     this.screen.append(obj.voodoo);
     var voodoos = obj.voodoos;
+
     for(var i = 0; i < voodoos.length; i++) {
       this.screen.append(voodoos[i]);
     }
@@ -69,6 +69,41 @@ var StoryBoard = (function() {
       width: width + "px",
       height: height +"px"
     });
+  };
+
+  _proto.compile = function() {
+    var svg = new SVGDOMElement("svg"),
+      objects = this.objects;
+
+    svg.setAttrs({
+      "version": "1.1",
+      "xmlns": "http://www.w3.org/2000/svg",
+      "xmlns:xlink": "http://www.w3.org/1999/xlink",
+      "x": "0px",
+      "y": "0px",
+      "width": "2000px",
+      "height": "2000px",
+      "viewBox": "0 0 2000 2000",
+      "enable-background": "0 0 2000 2000",
+      "xml:space": "preserve"
+    });
+
+    for(var i = 0, il = objects.length; i < il; i++) {
+      svg.append(objects[i].compile());
+    }
+
+    return svg;
+  };
+
+  _proto.preview = function() {
+    var xml = new Blob([this.compile().outerHTML], {
+      type: 'text/xml'
+    });
+
+    var url = webkitURL.createObjectURL(xml);
+    window.open(url);
+
+    window.url = url;
   };
 
   Object.defineProperty(_proto, "length", {

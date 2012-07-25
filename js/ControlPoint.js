@@ -1,5 +1,4 @@
 /*global util, Point, SVGDOMElement*/
-
 var ControlPoint = (function() {
   "use strict";
 

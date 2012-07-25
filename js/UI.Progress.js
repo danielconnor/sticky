@@ -1,16 +1,22 @@
-UI.Progress = function(length) {
-	UI.SingleRangeControl.call(this,0,length);
+/*global util, UI*/
+UI.Progress = (function() {
+  "use strict";
 
-	this.classList.add("progress");
-	this.classList.add("display-value");
+  function Progress(length) {
+    UI.SingleRangeControl.call(this, 0, length);
 
-	this.length = length;
-	this.current = 0;
+    this.classList.add("progress");
+    this.classList.add("display-value");
 
-	this.value = 0;
+    this.length = length;
+    this.current = 0;
+    this.value = 0;
+  }
 
-};
+  util.inherits(Progress, UI.SingleRangeControl);
 
-UI.Progress.prototype = new UI.SingleRangeControl;
-UI.Progress.prototype.constructor = UI.Progress;
+  var _proto = Progress.prototype,
+    _super = UI.SingleRangeControl.prototype;
 
+  return Progress;
+})();

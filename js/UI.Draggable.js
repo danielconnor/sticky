@@ -1,5 +1,4 @@
 /*global util, UI, Point*/
-
 UI.Draggable = (function() {
   "use strict";
 

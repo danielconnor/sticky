@@ -1,54 +1,64 @@
-UI.MultiRangeControl = function(max, min) {
-	UI.RangeControl.call(this, max, min);
+/*global util, UI */
+UI.MultiRangeControl = (function() {
+  "use strict";
 
-	this.classList.add("multi");
+  function MultiRangeControl(max, min) {
+    UI.RangeControl.call(this, max, min);
 
-	this.handle("DOMNodeInsertedIntoDocument");
-	//this.handle("DOMNodeInserted");
-}
-UI.MultiRangeControl.prototype = new UI.RangeControl();
-UI.MultiRangeControl.prototype.constructor = UI.MultiRangeControl;
-UI.MultiRangeControl.prototype.supr = UI.RangeControl.prototype;
+    this.classList.add("multi");
 
-UI.MultiRangeControl.prototype.addSlider = function(value) {
-	var slider = new UI.RangeSliderControl(this);
-	slider.value = value;
-	this.append(slider);
-	return slider;
-}
+    this.handle("DOMNodeInsertedIntoDocument");
+    //this.handle("DOMNodeInserted");
+  }
 
-UI.MultiRangeControl.prototype.setMax = function(max) {
-	var diff = (max - this._min) / (this._max - this._min);
+  util.inherits(MultiRangeControl, UI.RangeControl);
 
-	this.supr.setMax.call(this, max);
+  var _proto = MultiRangeControl.prototype,
+    _super = UI.RangeControl.prototype;
 
-	var children = this.children;
-	for(var i = 0, il = children.length; i < il; i++) {
-		var child = children[i];
+  _proto.addSlider = function(value) {
+    var slider = new UI.RangeSliderControl(this);
+    slider.value = value;
+    this.append(slider);
+    return slider;
+  };
 
-		child.value = child._value * diff;
-	}
-}
+  _proto.setMax = function(max) {
+    var diff = (max - this._min) / (this._max - this._min);
 
-UI.MultiRangeControl.prototype.setMin = function(min) {
-	var diff = (this._max - min) / (this._max - this._min);
+    this.supr.setMax.call(this, max);
 
-	this.supr.setMin.call(this, min);
+    var children = this.children;
+    for(var i = 0, il = children.length; i < il; i++) {
+      var child = children[i];
 
-	var children = this.children;
-	for(var i = 0, il = children.length; i < il; i++) {
-		var child = children[i];
+      child.value = child._value * diff;
+    }
+  };
 
-		child.value = child._value * diff;
-	}
-}
+  _proto.setMin = function(min) {
+    var diff = (this._max - min) / (this._max - this._min);
 
-UI.MultiRangeControl.prototype.DOMNodeInsertedIntoDocument = 
-UI.MultiRangeControl.prototype.DOMNodeInserted = function() {
-	var children = this.children;
-	for(var i = 0, il = children.length; i < il; i++) {
-		var child = children[i];
+    this.supr.setMin.call(this, min);
 
-		child.value = child._value;
-	}
-}
+    var children = this.children;
+    for(var i = 0, il = children.length; i < il; i++) {
+      var child = children[i];
+
+      child.value = child._value * diff;
+    }
+  };
+
+  _proto.DOMNodeInsertedIntoDocument =
+  _proto.DOMNodeInserted = function() {
+    var children = this.children;
+    for(var i = 0, il = children.length; i < il; i++) {
+      var child = children[i];
+
+      child.value = child._value;
+    }
+  };
+
+  return MultiRangeControl;
+
+})();

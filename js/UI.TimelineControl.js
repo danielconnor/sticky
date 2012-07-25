@@ -1,5 +1,4 @@
 /*global util, UI */
-
 UI.TimelineControl = (function() {
   "use strict";
 

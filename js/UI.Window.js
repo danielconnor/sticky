@@ -1,5 +1,4 @@
 /*global util, UI*/
-
 UI.Window = (function() {
   "use strict";
   function Window(title) {

@@ -1,5 +1,4 @@
 /*global util, DOMElement, DOMTokenList*/
-
 UI.Control = (function() {
   "use strict";
 

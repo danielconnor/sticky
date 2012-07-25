@@ -1,5 +1,4 @@
 /*global Bone, util*/
-
 var Skull = (function() {
   "use strict";
 
@@ -13,12 +12,13 @@ var Skull = (function() {
   util.inherits(Skull, Bone);
 
   Skull.prototype.draw = function() {
-    var marrow = this.marrow;
-    marrow.setAttr("fill", "none");
-    marrow.setAttr("stroke", "#000000");
-    marrow.setAttr("cx", this.staticEndpoint.x);
-    marrow.setAttr("cy", this.staticEndpoint.y);
-    marrow.setAttr("r", this._length);
+    this.marrow.setAttrs({
+      "fill": "none",
+      "stroke": "#000000",
+      "cx": this.staticEndpoint.x,
+      "cy": this.staticEndpoint.y,
+      "r": this._length
+    });
   };
 
   return Skull;

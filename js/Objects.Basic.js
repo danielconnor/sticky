@@ -1,5 +1,4 @@
 /*global util, UI, Voodoo*/
-
 Objects.Basic = (function() {
   "use strict";
 
@@ -21,7 +20,7 @@ Objects.Basic = (function() {
   util.inherits(Basic, UI.MultiRangeControl);
 
   Basic.prototype.compile = function() {
-    return this.timeline.compile();
+    return this.obj.compile();
   };
 
   return Basic;

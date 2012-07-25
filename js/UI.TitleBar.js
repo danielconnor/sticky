@@ -1,5 +1,4 @@
 /*global util, UI*/
-
 UI.TitleBar = (function() {
   "use strict";
 

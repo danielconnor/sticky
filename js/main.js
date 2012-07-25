@@ -1,5 +1,4 @@
 /*global StoryBoard, Objects, Point */
-
 (function() {
   "use strict";
 

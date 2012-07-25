@@ -1,5 +1,4 @@
 /*global Objects, util, Voodoo, UI*/
-
 Objects.Composite = (function() {
   "use strict";
 
@@ -25,16 +24,6 @@ Objects.Composite = (function() {
 
   var _proto = Composite.prototype,
     _super = Objects.Basic.prototype;
-
-  Composite.prototype.compile = function() {
-    var base = _super.compile.call(this),
-      timelines = this.timelines;
-    for(var i = 0, il = timelines.length; i < il; i++) {
-      base.append(timelines[i].compile());
-    }
-
-    return base;
-  };
 
   return Composite;
 })();

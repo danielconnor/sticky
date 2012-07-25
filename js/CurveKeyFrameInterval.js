@@ -1,5 +1,4 @@
 /*global util, ControlPoint, Point, KeyFrameInterval, Voodoo, SVGDOMElement*/
-
 var CurveKeyFrameInterval = (function() {
   "use strict";
 
@@ -61,7 +60,10 @@ var CurveKeyFrameInterval = (function() {
 
   util.inherits(CurveKeyFrameInterval, KeyFrameInterval);
 
-  CurveKeyFrameInterval.prototype.handleUpdate = function() {
+  var _proto = CurveKeyFrameInterval.prototype,
+    _super = KeyFrameInterval.prototype;
+
+  _proto.handleUpdate = function() {
     var prev = this.prev._prop,
       next = this.next._prop,
       pO = this.prevOffset,
@@ -79,7 +81,7 @@ var CurveKeyFrameInterval = (function() {
     this.emit("change");
   };
 
-  CurveKeyFrameInterval.prototype.update = function() {
+  _proto.update = function() {
       var prev = this.prev._prop,
       next = this.next._prop,
       pO = this.prevOffset,
@@ -107,15 +109,15 @@ var CurveKeyFrameInterval = (function() {
 
   };
 
-  CurveKeyFrameInterval.prototype.getInterval = function(time) {
+  _proto.getInterval = function(time) {
     return this.path.element.getPointAtLength((time - this._prev.time) / (this._next.time - this._prev.time) * this.totalLength).clone();
   };
 
-  CurveKeyFrameInterval.prototype.remove = function() {
-    this.supr.remove.call(this);
+  _proto.remove = function() {
+    _super.remove.call(this);
   };
 
-  CurveKeyFrameInterval.prototype.getTransform = function() {
+  _proto.getTransform = function() {
     var transform = new SVGDOMElement("animateMotion");
 
     transform.setAttr("fill", "freeze");
@@ -126,7 +128,7 @@ var CurveKeyFrameInterval = (function() {
     return transform;
   };
 
-  Object.defineProperty(CurveKeyFrameInterval.prototype, "active", {
+  Object.defineProperty(_proto, "active", {
     set: function(active) {
       // make sure it's a boolean
       this._active = !!active;

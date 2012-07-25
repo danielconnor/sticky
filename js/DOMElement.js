@@ -1,5 +1,4 @@
 /*global util, EventEmitter*/
-
 var DOMElement = (function() {
   "use strict";
 

@@ -1,5 +1,4 @@
 /*global util, ControlPoint CurveKeyFrameInterval*/
-
 var AnimatableObject = (function() {
   "use strict";
 
