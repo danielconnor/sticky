@@ -25,5 +25,26 @@ Objects.Composite = (function() {
   var _proto = Composite.prototype,
     _super = Objects.Basic.prototype;
 
+  _proto.deselect = function() {
+    var voodoos = this.voodoos,
+      timelines = this.timelines,
+      children = this.children;
+
+    for(var i = 0, il = voodoos.length; i < il; i++) {
+      voodoos[i].hide();
+    }
+
+  };
+
+  _proto.select = function() {
+    var voodoos = this.voodoos,
+      timelines = this.timelines,
+      children = this.children;
+
+    for(var i = 0, il = voodoos.length; i < il; i++) {
+      voodoos[i].show();
+    }
+  };
+
   return Composite;
 })();

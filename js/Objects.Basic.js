@@ -19,9 +19,21 @@ Objects.Basic = (function() {
 
   util.inherits(Basic, UI.MultiRangeControl);
 
-  Basic.prototype.compile = function() {
+  var _proto = Basic.prototype,
+    _super = UI.MultiRangeControl.prototype;
+
+  _proto.compile = function() {
     return this.obj.compile();
   };
+
+  _proto.select = function() {
+    this.voodoo.show();
+  };
+  
+  _proto.deselect = function() {
+    this.voodoo.hide();
+  };
+
 
   return Basic;
 })();

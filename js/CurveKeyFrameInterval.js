@@ -110,7 +110,7 @@ var CurveKeyFrameInterval = (function() {
   };
 
   _proto.getInterval = function(time) {
-    return this.path.element.getPointAtLength((time - this._prev.time) / (this._next.time - this._prev.time) * this.totalLength).clone();
+    return this.path.element.getPointAtLength((time - this._prev.value) / (this._next.value - this._prev.value) * this.totalLength).clone();
   };
 
   _proto.remove = function() {

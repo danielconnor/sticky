@@ -6,6 +6,8 @@ UI.DropZone = (function() {
   function DropZone(tagName, classes) {
     UI.Control.call(this, tagName, classes);
 
+    this.classList.add("dropzone");
+
     this.handle("dragenter");
     this.handle("dragleave");
     this.handle("dragover");
@@ -13,24 +15,24 @@ UI.DropZone = (function() {
   }
   util.inherits(DropZone, UI.Control);
 
-  DropZone.prototype.ondragenter = function(e) {
+  DropZone.prototype.dragenter = function(e) {
     this.classList.add("dragging");
   };
 
-  DropZone.prototype.ondragleave = function(e) {
-    this.classList.add("dragging");
+  DropZone.prototype.dragleave = function(e) {
+    this.classList.remove("dragging");
   };
 
-  DropZone.prototype.ondragover = function(e) {
+  DropZone.prototype.dragover = function(e) {
     e.preventDefault();
-    this.ondragenter(e);
+    this.dragenter(e);
     e.dataTransfer.dropEffect = 'copy';
   };
 
-  DropZone.prototype.ondrop = function(e) {
+  DropZone.prototype.drop = function(e) {
     e.stopPropagation();
     e.preventDefault();
-    this.ondragleave(e);
+    this.dragleave(e);
     var files = e.dataTransfer.files;
     this.emit("drop", files);
     return files;

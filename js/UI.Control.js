@@ -5,10 +5,9 @@ UI.Control = (function() {
   function Control(tagName, classes) {
     DOMElement.call(this, "http://www.w3.org/1999/xhtml", tagName);
 
-    if(!arguments[0]) return;
-
     this.children = [];
     this.classList = this.element.classList || new DOMTokenList(this.element);
+    this.style = this.element.style;
 
     this.measurement = "%";
 

@@ -28,11 +28,11 @@ UI.TimelineControl = (function() {
       var prev = this.prev,
         next = this.next;
 
-      if(next && this.time > next.time) {
-        this.time = next.time - 1;
+      if(next && this.value > next.value) {
+        this.value = next.value - 1;
       }
-      if(prev && this.time < prev.time) {
-        this.time = prev.time + 1;
+      if(prev && this.value < prev.value) {
+        this.value = prev.value + 1;
       }
     };
 

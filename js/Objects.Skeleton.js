@@ -11,6 +11,10 @@ Objects.C.Skeleton = (function() {
   Skeleton.create = function(position, callback) {
     var obj = new BoneCollection("g", position);
 
+    obj.addEventListener("select", function() {
+      console.log("selected");
+    });
+
     obj.addBones(Objects.C.Skeleton.layout, function(bone) {
       if(callback) callback(bone);
     });
