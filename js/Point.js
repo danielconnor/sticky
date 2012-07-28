@@ -93,7 +93,11 @@ var Point = (function() {
       y = point.y;
     }
     else x = point;
-    return distance(this.x, this.y, x, y);
+
+    var x2 = x - this.x,
+      y2 = y - this.y;
+
+    return Math.sqrt(x2 * x2 + y2 * y2);
   };
 
   Point.fromAngle = function(angle, length) {
@@ -105,20 +109,63 @@ var Point = (function() {
   return Point;
 })();
 
-
 Point.test = function() {
-  var a = new Point(200, 200),
-    b = new Point(1, 1);
+  var proto = this.prototype,
+    functions = Object.keys(proto);
 
-  console.time("add(number, number)");
-  for(var i = 0; i < 10000000; i++) {
-    a.add(1, 1);
+  for(var i = 0, il = functions.length; i < il; i++) {
+    var funcName = functions[i],
+      testFunc = proto[funcName].test;
+    if(testFunc) {
+      console.log(funcName, proto[funcName].test());
+    }
   }
-  console.timeEnd("add(number, number)");
+};
+Point.prototype.toString.test = function() {
+  var x = 200;
+  var y = 200;
+  var a = new Point(x, y);
+  return a.toString() === x + "," + y;
+};
+Point.prototype.distanceTo.test = function() {
+  var dist = 100;
+  var a = new Point(200, 200);
+  var b = new Point(a.x, a.y + dist);
+  var c = new Point(a.x + dist, a.y);
 
-  console.time("add(Point)");
-  for(var j = 0; j < 10000000; j++) {
-    a.add(b);
-  }
-  console.timeEnd("add(Point)");
+  return a.distanceTo(b) === dist && a.distanceTo(c) === dist;
+};
+Point.prototype.clone.test = function() {
+  var a = new Point(200, 200);
+  var b = a.clone();
+
+  return a.toString() === b.toString() && a !== b;
+};
+Point.prototype.mirror.test = function() {
+  var a = new Point(200, 200);
+  var center = new Point(400, 400);
+  var mirror = a.mirror(center);
+  var b = mirror.mirror(center);
+
+  return b.toString() === a.toString();
+};
+Point.prototype.add.test = function() {
+  var x = 200;
+  var y = 200;
+  var x1 = x + 1;
+  var y1 = y + 1;
+  var a = new Point(x, y);
+  var a1 = a.add(1,1);
+
+  return a1.x === x1 && a1.y === y1;
+};
+Point.prototype.addSelf.test = function() {
+  var x = 200;
+  var y = 200;
+  var x1 = x + 1;
+  var y1 = y + 1;
+  var a = new Point(x, y);
+  a.addSelf(1,1);
+
+  return a.x === x1 && a.y === y1;
 };

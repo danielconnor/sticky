@@ -15,12 +15,15 @@ var ControlPoint = (function() {
   var _proto = ControlPoint.prototype,
     _super = SVGDOMElement.prototype;
 
-  _proto.setPosition = function(x, y) {
-    if(typeof x === "object") {
-      y = x.y;
-      x = x.x;
+  _proto.setPosition = function(point, y) {
+    var x;
+    if(y === undefined) {
+      y = point.y;
+      x = point.x;
     }
-    if(this._position.x != x || this._position.y != y) {
+    else x = point;
+    
+    if(this._position.x !== x || this._position.y !== y) {
       this._position.x = x;
       this._position.y = y;
 

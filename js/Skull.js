@@ -4,9 +4,6 @@ var Skull = (function() {
 
   function Skull(parent, angle, radius) {
     Bone.call(this, parent, angle, radius, "circle");
-
-
-    this.update();
   }
 
   util.inherits(Skull, Bone);

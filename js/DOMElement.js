@@ -9,7 +9,7 @@ var DOMElement = (function() {
 
     this.children = [];
 
-    this.element = document.createElementNS(ns, tagName);
+    this.element = document.createElementNS(ns, tagName || "div");
     this.element._domElement = this;
   }
 

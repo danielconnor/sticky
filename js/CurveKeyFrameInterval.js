@@ -52,9 +52,9 @@ var CurveKeyFrameInterval = (function() {
     this.append(this.nextControlPoint);
     this.append(this.prevVoodoo);
     this.append(this.nextVoodoo);
-
     this.append(this.lengthDisplay);
 
+    // TODO: don't do this.
     document.getElementsByTagName("svg")[0].appendChild(this.element);
   }
 

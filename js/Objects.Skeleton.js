@@ -8,7 +8,6 @@ Objects.C.Skeleton = (function() {
 
   util.inherits(Skeleton, Objects.Composite);
 
-
   Skeleton.create = function(position, callback) {
     var obj = new BoneCollection("g", position);
 
@@ -19,7 +18,6 @@ Objects.C.Skeleton = (function() {
 
     return obj;
   };
-
 
   Skeleton.layout =  {
     type: "Skeleton",

@@ -16,7 +16,6 @@ var Bone = (function() {
 
     this.handle("click");
 
-
     this.staticEndpoint.addSelf(parent.staticEndpoint.x + length, parent.staticEndpoint.y);
 
     this.draw();

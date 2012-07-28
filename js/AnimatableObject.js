@@ -6,7 +6,6 @@ var AnimatableObject = (function() {
     ControlPoint.call(this, tagName, position);
 
     this.properties = [];
-
   }
 
   util.inherits(AnimatableObject, ControlPoint);

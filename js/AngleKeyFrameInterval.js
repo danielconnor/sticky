@@ -21,7 +21,6 @@ var AngleKeyFrameInterval = (function() {
     this.path.setAttr("stroke-width", "1.5px");
     this.path.setAttr("stroke-dasharray", "2,2");
 
-
     this.path.element.addEventListener("click", this.click.bind(this), false);
 
 
