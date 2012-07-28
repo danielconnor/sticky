@@ -2,11 +2,13 @@
 var BoneCollection = (function() {
   "use strict";
 
-  function BoneCollection(tagName, position /*Point*/) {
+  function BoneCollection(tagName, position) {
     AnimatableObject.call(this, tagName, position);
 
     // where child bones should be attached
     this.staticEndpoint = new Point(0,0);
+
+    this.handle("click");
 
     this.bones = [];
   }
@@ -35,6 +37,10 @@ var BoneCollection = (function() {
     this.bones.push(bone);
     this.append(bone);
     return bone;
+  };
+
+  _proto.click = function() {
+    this.emit("select");
   };
 
   _proto.updateTransform = function() {
@@ -70,6 +76,20 @@ var BoneCollection = (function() {
     
     clone.removeAttr("transform");
     return clone;
+  };
+
+  _proto.toJSON = function() {
+    var bones = this.bones,
+      il = bones.length,
+      jsonBones = new Array(il);
+
+    for(var i = 0; i < il; i++) {
+      jsonBones[i] = bones[i].toJSON();
+    }
+
+    return {
+      bones: jsonBones
+    };
   };
 
   _proto.compile = function() {

@@ -10,7 +10,7 @@ var Skull = (function() {
 
   Skull.prototype.draw = function() {
     this.marrow.setAttrs({
-      "fill": "none",
+      "fill": "#fff",
       "stroke": "#000000",
       "cx": this.staticEndpoint.x,
       "cy": this.staticEndpoint.y,
