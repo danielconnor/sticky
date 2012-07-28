@@ -64,16 +64,10 @@ UI.KeyFrameControl = (function() {
     }
   });
 
-  //TODO: get rid of this. Left for compatability reasons
-  Object.defineProperty(_proto, "time", {
-    get: function() {
-      return this._value;
-    },
-    set: function(time) {
-
-      this.value = time;
-    }
-  });
+  // set a snapshot of the animatable at this keyframe
+  _proto.setSnapshot = function() {
+    
+  };
 
   _proto.sort = function(k1, k2) {
     return k1._time - k2._time;

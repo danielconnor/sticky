@@ -48,7 +48,7 @@ var KeyFrameInterval = (function() {
   });
 
   KeyFrameInterval.prototype.getInterval = function(time) {
-    var f = (time - this._prev.time) / (this._next.time - this._prev.time);
+    var f = (time - this._prev.value) / (this._next.value - this._prev.value);
 
     return this._prev.prop + (this._next.prop - this._prev.prop) * f;
   };
