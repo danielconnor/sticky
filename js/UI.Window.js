@@ -2,17 +2,16 @@
 UI.Window = (function() {
   "use strict";
   function Window(title) {
-      UI.Control.call(this, "div", ["window"]);
+    UI.Control.call(this, "div", ["window"]);
 
-      this.measurement = "px";
+    this.measurement = "px";
 
-      this.titleBar = new UI.TitleBar(title);
-      this.titleBar.addEventListener("drag", this.drag.bind(this), false);
-      _super.append.call(this, this.titleBar);
+    this.titleBar = new UI.TitleBar(title);
+    this.titleBar.addEventListener("drag", this.drag.bind(this), false);
+    _super.append.call(this, this.titleBar);
 
-      this.contents = new UI.Control("div", ["contents"]);
-      _super.append.call(this, this.contents);
-
+    this.contents = new UI.Control("div", ["contents"]);
+    _super.append.call(this, this.contents);
   }
 
   util.inherits(Window, UI.Control);
@@ -30,10 +29,9 @@ UI.Window = (function() {
     }
   });
 
-  _proto.drag = function(sender, e) {
-    var offset = sender.offset;
-    this.left = e.pageX - offset.x;
-    this.top = e.pageY - offset.y;
+  _proto.drag = function(e, x, y) {
+    this.left = x;
+    this.top = y;
   };
 
   _proto.append = function(control) {
