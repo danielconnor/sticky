@@ -11,7 +11,23 @@ var util = (function() {
           configurable: true
         }
       });
-    }
+    },
+
+    getStyleBySelector: function(selector) {
+      var sheetList = document.styleSheets;
+      var ruleList;
+      var i = sheetList.length, j;
+
+      while (i--) {
+        ruleList = sheetList[i].cssRules;
+        for (j = 0; j < ruleList.length; j++) {
+          if (ruleList[j].type == CSSRule.STYLE_RULE && ruleList[j].selectorText == selector) {
+            return ruleList[j].style;
+          }
+        }
+      }
+      return null;
+   }
   };
 
 })();

@@ -1,22 +1,30 @@
-/*global Objects, util, Voodoo, UI*/
+/*global Objects, util, Voodoo, UI, BoneCollection*/
 Objects.Composite = (function() {
   "use strict";
 
-  function Composite(position, createObject) {
+  function Composite(position, layout) {
+    Objects.Basic.call(this, new BoneCollection("g", position));
     var composite = this;
 
     this.children = [];
     this.voodoos = [];
-    this.timelines = [];
+    this.timelines = this.timelineCollection.children;
 
-    Objects.Basic.call(this, createObject(position, function(child){
-      composite.children.push(child);
-      composite.voodoos.push(new Voodoo(child));
-      composite.timelines.push(new UI.TimelineControl(child, "angle", 0, 1000));
-    }));
+    var obj = this.obj;
+
+    obj.addEventListener("select", function() {
+      console.log("selected");
+    });
+
+    obj.addBones(layout, function(bone) {
+      composite.children.push(bone);
+      composite.voodoos.push(new Voodoo(bone));
+      composite.timelineCollection.append(new UI.TimelineControl(bone, "angle", 0, 1000));
+    });
+    obj.update();
+
 
     for(var i = 0; i < this.timelines.length; i++) {
-      this.timelineCollection.append(this.timelines[i]);
     }
   }
 

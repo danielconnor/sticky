@@ -1,1 +1,2 @@
-window.UI = {};
+window.UI = {
+};

@@ -7,6 +7,7 @@ UI.Draggable = (function() {
 
     this.parent = parent;
     this.offset = new Point();
+    this.start = new Point();
     this.threshold = 5;
 
     this.dragged = false;
@@ -15,10 +16,10 @@ UI.Draggable = (function() {
     this.mousemove = this.mousemove.bind(this);
     this.mouseup = this.mouseup.bind(this);
 
-    this.handle("mousedown");
-    this.handle("dragstart");
-    this.handle("selectstart");
-    this.handle("click");
+    this.addEventListener("mousedown", this.mousedown.bind(this), false);
+    this.addEventListener("dragstart", this.dragstart.bind(this), false);
+    this.addEventListener("selectstart", this.selectstart.bind(this), false);
+    this.addEventListener("click", this.click.bind(this), false);
   }
 
   util.inherits(Draggable, UI.Control);
@@ -33,13 +34,18 @@ UI.Draggable = (function() {
 
     this.emit("drag", e, x, y);
 
-    this.dragged = true;
+    if(!this.dragged) {
+      this.dragged = this.start.distanceTo(e.pageX, e.pageY) > this.threshold;
+    }
+
     e.preventDefault();
     e.stopPropagation();
     return false;
   };
 
   _proto.mousedown = function(e) {
+    this.start.x = e.pageX;
+    this.start.y = e.pageY;
     this.offset.x = e.pageX - this.left;
     this.offset.y = e.pageY - this.top;
     document.addEventListener("mousemove", this.mousemove, false);

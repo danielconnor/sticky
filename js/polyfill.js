@@ -72,5 +72,5 @@ window.DOMTokenList = window.DOMTokenList || (function() {
       return fBound;
     };
   }
-
 })();
+

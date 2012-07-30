@@ -15,8 +15,8 @@ UI.SingleRangeControl = (function() {
       rangeControl.emit("change");
     });
 
-    this.handle("DOMNodeInserted");
-    this.handle("mousedown");
+    this.addEventListener("DOMNodeInserted", this.DOMNodeInserted.bind(this), false);
+    this.addEventListener("mousedown", this.mousedown.bind(this), false);
 
     this.slider._value = value;
   }

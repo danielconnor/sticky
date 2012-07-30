@@ -8,10 +8,10 @@ UI.DropZone = (function() {
 
     this.classList.add("dropzone");
 
-    this.handle("dragenter");
-    this.handle("dragleave");
-    this.handle("dragover");
-    this.handle("drop");
+    this.addEventListener("dragenter", this.dragenter.bind(this), false);
+    this.addEventListener("dragleave", this.dragleave.bind(this), false);
+    this.addEventListener("dragover", this.dragover.bind(this), false);
+    this.addEventListener("drop", this.drop.bind(this), false);
   }
   util.inherits(DropZone, UI.Control);
 
@@ -34,7 +34,7 @@ UI.DropZone = (function() {
     e.preventDefault();
     this.dragleave(e);
     var files = e.dataTransfer.files;
-    this.emit("drop", files);
+    this.emit("dropfiles", files);
     return files;
   };
 

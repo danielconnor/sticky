@@ -14,9 +14,9 @@ var Voodoo = (function() {
 
     this.obj.addEventListener("change", this.update.bind(this));
 
-    this.handle("mousedown");
-    this.handle("dragstart");
-    this.handle("selectstart");
+    this.addEventListener("mousedown", this.mousedown.bind(this), false);
+    this.addEventListener("dragstart", this.dragstart.bind(this), false);
+    this.addEventListener("selectstart", this.selectstart.bind(this), false);
 
     this.mousemove = this.mousemove.bind(this);
 

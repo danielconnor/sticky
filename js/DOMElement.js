@@ -54,10 +54,6 @@ var DOMElement = (function() {
     if(parent) parent.removeChild(element);
   };
 
-  _proto.handle = function(eventName) {
-    this.element.addEventListener(eventName, this[eventName].bind(this), false);
-  };
-
   _proto.setAttribute =
   _proto.setAttr = function(namespace, name, val) {
     if(!val) {
@@ -127,6 +123,15 @@ var DOMElement = (function() {
     this.emit("clone", cloned);
 
     return cloned;
+  };
+
+  _proto.addEventListener = function() {
+    if(arguments.length === 3 && "on" + arguments[0] in this.element) {
+      return Element.prototype.addEventListener.apply(this.element, arguments);
+    }
+    else {
+      return _super.addEventListener.apply(this, arguments);
+    }
   };
 
   Object.defineProperty(_proto, "outerHTML", {

@@ -27,7 +27,7 @@ UI.Popout = (function() {
   _proto.dragend = function(e, x, y) {
     e.preventDefault();
     this.style.webkitTransitionDuration = this.style["margin-left"] = "";
-    if(-200 + x > -100) {
+    if(x - 200 > -100) {
       this.popout();
     }
     else this.popin();
@@ -35,7 +35,7 @@ UI.Popout = (function() {
 
   _proto.drag = function(e, x, y) {
     this.style.webkitTransitionDuration = "0";
-    this.style["margin-left"] =  (-200 + x) + "px";
+    this.style["margin-left"] =  x - 200 + "px";
   };
 
   _proto.popout = function() {

@@ -7,8 +7,8 @@ UI.MultiRangeControl = (function() {
 
     this.classList.add("multi");
 
-    this.handle("DOMNodeInsertedIntoDocument");
-    //this.handle("DOMNodeInserted");
+    this.addEventListener("DOMNodeInsertedIntoDocument", this.DOMNodeInsertedIntoDocument.bind(this), false);
+    //this.addEventListener("DOMNodeInserted", this.DOMNodeInserted.bind(this), false);
   }
 
   util.inherits(MultiRangeControl, UI.RangeControl);

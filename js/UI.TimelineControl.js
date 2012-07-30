@@ -10,7 +10,7 @@ UI.TimelineControl = (function() {
     this.classList.add("timeline");
     this.classList.add("display-value");
 
-    this.handle("dblclick");
+    this.addEventListener("dblclick", this.dblclick.bind(this), false);
 
     this.keyFrames = [];
     this.intervals = [];
@@ -203,7 +203,7 @@ UI.TimelineControl = (function() {
   //however we don't really expect huge numbers of keyFrames so we use indexOf unless specified
   _proto.findKeyFramePos = function(keyFrame, binarySearch) {
     var keyFrames = this.keyFrames,
-      i = binarySearch ? this.getPositionAt(keyFrame.time) : keyFrames.indexOf(keyFrame);
+      i = binarySearch ? this.getPositionAt(keyFrame.value) : keyFrames.indexOf(keyFrame);
     return keyFrames[i] == keyFrame ? i : -1;
   };
 
@@ -296,9 +296,9 @@ UI.TimelineControl = (function() {
     for(i = 0, il = keyFrames.length; i < il - 1; i++) {
       cur = keyFrames[i];
       next = keyFrames[i + 1];
-      valid = cur.time < next.time;
+      valid = cur.value < next.value;
 
-      console.log("%d is less than %d: %s", cur.time.toFixed(2), next.time.toFixed(2), valid);
+      console.log("%d is less than %d: %s", cur.value.toFixed(2), next.value.toFixed(2), valid);
 
       success = valid && success;
     }
@@ -347,18 +347,16 @@ UI.TimelineControl = (function() {
         var loc = Math.floor(Math.random() * 999),
           k = keyFrames[loc];
 
-        console.log(loc);
-
         console.time("indexOf");
         for(i = 0; i < iter; i++) {
-          if(loc != keyFrames.indexOf(k)) console.log("error");
+          if(loc !== keyFrames.indexOf(k)) throw new Error("failed on " + loc + "===" + keyFrames.indexOf(k));
         }
         console.timeEnd("indexOf");
 
 
         console.time("findKeyFramePos");
         for(i = 0; i < iter; i++) {
-          if(loc != this.findKeyFramePos(k, true)) console.log("error");
+          if(loc !== this.findKeyFramePos(k, true)) throw new Error("failed on " + loc + "===" + this.findKeyFramePos(k, true));
         }
         console.timeEnd("findKeyFramePos");
       }

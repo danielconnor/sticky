@@ -95,13 +95,18 @@ var StoryBoard = (function() {
     return svg;
   };
 
-  _proto.preview = function() {
+  _proto.preview = function(e) {
     var xml = new Blob([this.compile().outerHTML], {
       type: 'text/xml'
     });
 
     var url = webkitURL.createObjectURL(xml);
     window.open(url);
+
+    if(!e) {
+      prompt("The window with the preview seems like it was blocked");
+      window.open(url);
+    }
 
     window.url = url;
   };

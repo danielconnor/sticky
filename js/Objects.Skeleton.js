@@ -2,26 +2,11 @@
 Objects.C.Skeleton = (function() {
   "use strict";
 
-  function Skeleton(position) {
-    Objects.Composite.call(this, position, Objects.C.Skeleton.create);
+  function Skeleton(position, layout) {
+    Objects.Composite.call(this, position, layout || Skeleton.layout);
   }
 
   util.inherits(Skeleton, Objects.Composite);
-
-  Skeleton.create = function(position, callback) {
-    var obj = new BoneCollection("g", position);
-
-    obj.addEventListener("select", function() {
-      console.log("selected");
-    });
-
-    obj.addBones(Objects.C.Skeleton.layout, function(bone) {
-      if(callback) callback(bone);
-    });
-    obj.update();
-
-    return obj;
-  };
 
   Skeleton.layout =  {
     type: "Skeleton",

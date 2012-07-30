@@ -22,7 +22,7 @@ UI.KeyFrameControl = (function() {
       this.emit("timechange");
     });
 
-    this.handle("click");
+    this.addEventListener("click", this.click.bind(this));
   }
 
   util.inherits(KeyFrameControl, UI.RangeSliderControl);

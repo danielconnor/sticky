@@ -145,7 +145,7 @@ var EventEmitter = (function() {
     return this;
   };
 
-  EventEmitter.prototype.once = function(type, listener) {
+  EventEmitter.prototype.once = function(type, listener, bubble) {
     if ('function' !== typeof listener) {
       throw new Error('.once only takes instances of Function');
     }
@@ -157,7 +157,7 @@ var EventEmitter = (function() {
     }
 
     g.listener = listener;
-    self.on(type, g);
+    self.on(type, g, bubble);
 
     return this;
   };
