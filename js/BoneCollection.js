@@ -8,6 +8,8 @@ var BoneCollection = (function() {
     // where child bones should be attached
     this.staticEndpoint = new Point(0,0);
 
+    // this.addEventListener("click", this.click.bind(this), false);
+
     this.bones = [];
   }
   util.inherits(BoneCollection, AnimatableObject);
@@ -37,9 +39,6 @@ var BoneCollection = (function() {
     return bone;
   };
 
-  _proto.click = function() {
-    this.emit("select");
-  };
 
   _proto.updateTransform = function() {
     this.setAttr("transform", "translate(" + this._position + ")");

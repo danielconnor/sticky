@@ -1,8 +1,8 @@
 /*global util, UI*/
-UI.RangeSliderControl = (function() {
+UI.RangeSlider = (function() {
   "use strict";
 
-   function RangeSliderControl(parent, enabled) {
+   function RangeSlider(parent, enabled) {
     UI.Draggable.call(this, "div", ["range-slider-control"]);
 
     this.enabled = enabled !== undefined ? enabled : true;
@@ -12,9 +12,9 @@ UI.RangeSliderControl = (function() {
     this._value = 0;
   }
 
-  util.inherits(RangeSliderControl, UI.Draggable);
+  util.inherits(RangeSlider, UI.Draggable);
 
-  var _proto = RangeSliderControl.prototype,
+  var _proto = RangeSlider.prototype,
     _super = UI.Draggable.prototype;
 
   _proto.mousemove = function(e, fromParent) {
@@ -50,5 +50,5 @@ UI.RangeSliderControl = (function() {
     }
   });
 
-  return RangeSliderControl;
+  return RangeSlider;
 })();

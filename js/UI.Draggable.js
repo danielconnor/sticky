@@ -60,7 +60,7 @@ UI.Draggable = (function() {
 
   _proto.click = function(e) {
     if(!this.dragged) {
-      this.emit("click", e);
+      this.emit("actualclick", e);
     }
     this.dragged = false;
   };

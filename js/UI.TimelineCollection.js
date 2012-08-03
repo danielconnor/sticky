@@ -1,13 +1,13 @@
 /*global util, UI*/
-UI.TimelineCollectionControl = (function() {
+UI.TimelineCollection = (function() {
   "use strict";
 
-  function TimelineCollectionControl() {
+  function TimelineCollection() {
     UI.Control.call(this, "div", ["timeline-collection"]);
   }
-  util.inherits(TimelineCollectionControl, UI.Control);
+  util.inherits(TimelineCollection, UI.Control);
 
-  var _proto = TimelineCollectionControl.prototype,
+  var _proto = TimelineCollection.prototype,
     _super = UI.Control.prototype;
 
   _proto.setCurrent = function(current) {
@@ -31,5 +31,5 @@ UI.TimelineCollectionControl = (function() {
     });
   };
 
-  return TimelineCollectionControl;
+  return TimelineCollection;
 })();

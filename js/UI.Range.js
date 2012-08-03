@@ -1,16 +1,16 @@
 /*global util, UI */
-UI.RangeControl = (function() {
+UI.Range = (function() {
   "use strict";
 
-  function RangeControl(max, min) {
+  function Range(max, min) {
     UI.Control.call(this, "div", ["range-control"]);
 
     this._max = max || 100;
     this._min = min === undefined ? 0 : min;
   }
-  util.inherits(RangeControl, UI.Control);
+  util.inherits(Range, UI.Control);
 
-  var _proto = RangeControl.prototype,
+  var _proto = Range.prototype,
     _super = UI.Control.prototype;
 
   _proto.valueAtOffset = function(offset) {
@@ -52,6 +52,6 @@ UI.RangeControl = (function() {
     }
   });
 
-  return RangeControl;
+  return Range;
 })();
 

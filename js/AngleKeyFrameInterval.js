@@ -37,6 +37,7 @@ var AngleKeyFrameInterval = (function() {
     this.clockwise = !this.clockwise;
     this.update();
   };
+  
 
   AngleKeyFrameInterval.prototype.update = function() {
     var length = 8,

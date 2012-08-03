@@ -117,6 +117,28 @@ var CurveKeyFrameInterval = (function() {
     _super.remove.call(this);
   };
 
+  _proto.select = function() {
+    _super.select.call(this);
+
+    this.prevControlPoint.show();
+    this.nextControlPoint.show();
+    this.prevVoodoo.show();
+    this.nextVoodoo.show();
+    this.lengthDisplay.show();
+  };
+
+
+  _proto.deselect = function() {
+    _super.deselect.call(this);
+
+    this.prevControlPoint.hide();
+    this.nextControlPoint.hide();
+    this.prevVoodoo.hide();
+    this.nextVoodoo.hide();
+    this.lengthDisplay.hide();
+  };
+
+
   _proto.getTransform = function() {
     var transform = new SVGDOMElement("animateMotion");
 

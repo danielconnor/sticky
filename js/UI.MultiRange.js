@@ -1,9 +1,9 @@
 /*global util, UI */
-UI.MultiRangeControl = (function() {
+UI.MultiRange = (function() {
   "use strict";
 
-  function MultiRangeControl(max, min) {
-    UI.RangeControl.call(this, max, min);
+  function MultiRange(max, min) {
+    UI.Range.call(this, max, min);
 
     this.classList.add("multi");
 
@@ -11,13 +11,13 @@ UI.MultiRangeControl = (function() {
     //this.addEventListener("DOMNodeInserted", this.DOMNodeInserted.bind(this), false);
   }
 
-  util.inherits(MultiRangeControl, UI.RangeControl);
+  util.inherits(MultiRange, UI.Range);
 
-  var _proto = MultiRangeControl.prototype,
-    _super = UI.RangeControl.prototype;
+  var _proto = MultiRange.prototype,
+    _super = UI.Range.prototype;
 
   _proto.addSlider = function(value) {
-    var slider = new UI.RangeSliderControl(this);
+    var slider = new UI.RangeSlider(this);
     slider.value = value;
     this.append(slider);
     return slider;
@@ -59,6 +59,6 @@ UI.MultiRangeControl = (function() {
     }
   };
 
-  return MultiRangeControl;
+  return MultiRange;
 
 })();

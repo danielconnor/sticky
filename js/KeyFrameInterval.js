@@ -24,6 +24,10 @@ var KeyFrameInterval = (function() {
     _super = SVGDOMElement.prototype;
 
   _proto.update = function() {};
+
+  _proto.select = function() {};
+
+  _proto.deselect = function() {};
   
   _proto.remove = function() {
     this.element.parentNode.removeChild(this.element);

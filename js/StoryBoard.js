@@ -35,12 +35,29 @@ var StoryBoard = (function() {
         children[i].setCurrent(this.value);
       }
     });
+
+    this.addEventListener("click", this.click.bind(this), false);
   }
 
   util.inherits(StoryBoard, UI.Control);
 
   var _proto = StoryBoard.prototype,
     _super = UI.Control.prototype;
+
+
+  _proto.click = function(e) {
+    if(e.target === this.screen.element) {
+      this.deselectObjects();
+    }
+  };
+
+  _proto.deselectObjects = function() {
+    var objects = this.objects,
+      i = objects.length;
+    while(i--) {
+      objects[i].deselect();
+    }
+  };
 
   _proto.addObject = function(obj) {
     var storyboard = this;
@@ -103,10 +120,10 @@ var StoryBoard = (function() {
     var url = webkitURL.createObjectURL(xml);
     window.open(url);
 
-    if(!e) {
-      prompt("The window with the preview seems like it was blocked");
-      window.open(url);
-    }
+    // if(!e) {
+    //   prompt("The window with the preview seems like it was blocked");
+    //   window.open(url);
+    // }
 
     window.url = url;
   };

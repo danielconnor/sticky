@@ -1,10 +1,10 @@
 /*global util, UI*/
 
-UI.KeyFrameControl = (function() {
+UI.KeyFrame = (function() {
   "use strict";
 
-  function KeyFrameControl(parent, property, time, enabled) {
-    UI.RangeSliderControl.call(this, parent, enabled);
+  function KeyFrame(parent, property, time, enabled) {
+    UI.RangeSlider.call(this, parent, enabled);
 
     this.classList.add("keyframe");
 
@@ -25,10 +25,10 @@ UI.KeyFrameControl = (function() {
     this.addEventListener("click", this.click.bind(this));
   }
 
-  util.inherits(KeyFrameControl, UI.RangeSliderControl);
+  util.inherits(KeyFrame, UI.RangeSlider);
 
-  var _proto = KeyFrameControl.prototype,
-    _super = UI.RangeSliderControl.prototype;
+  var _proto = KeyFrame.prototype,
+    _super = UI.RangeSlider.prototype;
 
   _proto.click = function(e) {
     this.emit("select", e);
@@ -73,5 +73,5 @@ UI.KeyFrameControl = (function() {
     return k1._time - k2._time;
   };
 
-  return KeyFrameControl;
+  return KeyFrame;
 })();

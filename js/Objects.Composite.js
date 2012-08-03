@@ -12,20 +12,14 @@ Objects.Composite = (function() {
 
     var obj = this.obj;
 
-    obj.addEventListener("select", function() {
-      console.log("selected");
-    });
 
     obj.addBones(layout, function(bone) {
       composite.children.push(bone);
       composite.voodoos.push(new Voodoo(bone));
-      composite.timelineCollection.append(new UI.TimelineControl(bone, "angle", 0, 1000));
+      composite.timelineCollection.append(new UI.Timeline(bone, "angle", 0, 1000));
     });
     obj.update();
 
-
-    for(var i = 0; i < this.timelines.length; i++) {
-    }
   }
 
   util.inherits(Composite, Objects.Basic);
@@ -33,25 +27,30 @@ Objects.Composite = (function() {
   var _proto = Composite.prototype,
     _super = Objects.Basic.prototype;
 
-  _proto.deselect = function() {
+  _proto.deselect = function(e) {
     var voodoos = this.voodoos,
       timelines = this.timelines,
-      children = this.children;
+      children = this.children,
+      i = voodoos.length;
 
-    for(var i = 0, il = voodoos.length; i < il; i++) {
+    while(i--) {
       voodoos[i].hide();
+      timelines[i].deselect();
     }
-
+    _super.deselect.call(this, e);
   };
 
-  _proto.select = function() {
+  _proto.select = function(e) {
     var voodoos = this.voodoos,
       timelines = this.timelines,
-      children = this.children;
+      children = this.children,
+      i = voodoos.length;
 
-    for(var i = 0, il = voodoos.length; i < il; i++) {
+    while(i--) {
       voodoos[i].show();
+      timelines[i].select();
     }
+    _super.select.call(this, e);
   };
 
   return Composite;

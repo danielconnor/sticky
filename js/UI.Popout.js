@@ -8,7 +8,7 @@ UI.Popout = (function() {
     this.container = new UI.Control("div", ["container"]);
     this.tab = new UI.Draggable("div", ["tab"]);
 
-    this.tab.addEventListener("click", this.toggle.bind(this), false);
+    this.tab.addEventListener("actualclick", this.toggle.bind(this), false);
     this.tab.addEventListener("drag", this.drag.bind(this));
     this.tab.addEventListener("dragend", this.dragend.bind(this));
 

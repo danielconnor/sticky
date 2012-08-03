@@ -6,12 +6,10 @@ UI.Prompt = (function() {
     UI.Control.call(this, "div", ["prompt"]);
     this.openClass = openClass;
     this.closedClass = closedClass || "prompt";
-
-    var closedStyleRule = util.getStyleBySelector("." + Array.prototype.join.call(this.classList, "."));
-  
-    this.animated = closedStyleRule ? !!closedStyleRule.webkitTransition : false;
-
     this.classList.add(this.closedClass);
+    
+    var style = window.getComputedStyle(this.element);
+    this.animated = style ? !!style.webkitTransition : false;
   }
   util.inherits(Prompt, UI.Control);
 

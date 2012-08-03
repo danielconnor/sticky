@@ -1,14 +1,14 @@
 /*global util, UI*/
-UI.SingleRangeControl = (function() {
+UI.SingleRange = (function() {
   "use strict";
 
-  function SingleRangeControl(value, max, min) {
-    UI.RangeControl.call(this, max, min);
+  function SingleRange(value, max, min) {
+    UI.Range.call(this, max, min);
     var rangeControl = this;
 
     this.classList.add("single");
 
-    this.slider = new UI.RangeSliderControl(this);
+    this.slider = new UI.RangeSlider(this);
     this.append(this.slider);
 
     this.slider.addEventListener("change", function(e) {
@@ -20,10 +20,10 @@ UI.SingleRangeControl = (function() {
 
     this.slider._value = value;
   }
-  util.inherits(SingleRangeControl, UI.RangeControl);
+  util.inherits(SingleRange, UI.Range);
 
-  var _proto = SingleRangeControl.prototype,
-    _super = UI.RangeControl.prototype;
+  var _proto = SingleRange.prototype,
+    _super = UI.Range.prototype;
 
   _proto.mousedown = function(e) {
     this.slider.mousedown(e);
@@ -43,5 +43,5 @@ UI.SingleRangeControl = (function() {
     this.slider.value = this.slider._value;
   };
 
-  return SingleRangeControl;
+  return SingleRange;
 })();

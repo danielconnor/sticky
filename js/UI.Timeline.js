@@ -1,9 +1,9 @@
 /*global util, UI */
-UI.TimelineControl = (function() {
+UI.Timeline = (function() {
   "use strict";
 
-  function TimelineControl(animatable, property, start, end) {
-    UI.MultiRangeControl.call(this, end, start);
+  function Timeline(animatable, property, start, end) {
+    UI.MultiRange.call(this, end, start);
 
     var timeline = this;
 
@@ -36,8 +36,8 @@ UI.TimelineControl = (function() {
       }
     };
 
-    this.addAtPosition(new UI.KeyFrameControl(this, animatable[property], end, false), 0);
-    this.addAtPosition(new UI.KeyFrameControl(this, animatable[property], this._current, false), 0);
+    this.addAtPosition(new UI.KeyFrame(this, animatable[property], end, false), 0);
+    this.addAtPosition(new UI.KeyFrame(this, animatable[property], this._current, false), 0);
 
     this._changeAnimatable = false;
 
@@ -59,10 +59,10 @@ UI.TimelineControl = (function() {
     });
   }
 
-  util.inherits(TimelineControl, UI.MultiRangeControl);
+  util.inherits(Timeline, UI.MultiRange);
 
-  var _proto = TimelineControl.prototype,
-    _super = UI.MultiRangeControl.prototype;
+  var _proto = Timeline.prototype,
+    _super = UI.MultiRange.prototype;
 
 
   _proto.setCurrent = function(current) {
@@ -195,7 +195,7 @@ UI.TimelineControl = (function() {
   _proto.addAtTime = function(time) {
     var i = this.getPositionAt(time);
 
-    this.addAtPosition(new UI.KeyFrameControl(this, this.curInterval.getInterval(time), time), i + 1);
+    this.addAtPosition(new UI.KeyFrame(this, this.curInterval.getInterval(time), time), i + 1);
   };
 
 
@@ -269,6 +269,20 @@ UI.TimelineControl = (function() {
 
       this.curInterval.update();
     }
+  };
+
+  _proto.deselect = function() {
+    var intervals = this.intervals,
+      i = intervals.length;
+
+    while(i--) intervals[i].deselect();
+  };
+
+  _proto.select = function() {
+    var intervals = this.intervals,
+      i = intervals.length;
+
+    while(i--) intervals[i].select();
   };
 
 
@@ -367,6 +381,6 @@ UI.TimelineControl = (function() {
     console.groupEnd();
   };
 
-  return TimelineControl;
+  return Timeline;
 
 })();

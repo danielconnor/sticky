@@ -14,7 +14,5 @@ UI.Resources = (function() {
   var _proto = Resources.prototype,
     _super = UI.Popout.prototype;
 
-
-
   return Resources;
 })();

@@ -1,4 +1,4 @@
-
+/*global CSSRule*/
 var util = (function() {
   "use strict";
   return {
