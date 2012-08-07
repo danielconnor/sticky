@@ -12,7 +12,7 @@ UI.TimelineCollection = (function() {
 
   _proto.setCurrent = function(current) {
     for(var i = 0, c = this.children, il = c.length; i < il; i++) {
-      c[i].current = current;
+      c[i].timeline.current = current;
     }
   };
 
@@ -23,10 +23,10 @@ UI.TimelineCollection = (function() {
     }
   });
 
-  _proto.append = function(control) {
-    _super.append.call(this, control);
+  _proto.append = function(timeline) {
+    _super.append.call(this, new UI.TimelineParent(timeline));
     var collection = this;
-    control.addEventListener("currentchange", function() {
+    timeline.addEventListener("currentchange", function() {
       collection.current = this._current;
     });
   };

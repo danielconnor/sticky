@@ -35,7 +35,7 @@ Objects.Composite = (function() {
 
     while(i--) {
       voodoos[i].hide();
-      timelines[i].deselect();
+      timelines[i].timeline.deselect();
     }
     _super.deselect.call(this, e);
   };
@@ -48,7 +48,7 @@ Objects.Composite = (function() {
 
     while(i--) {
       voodoos[i].show();
-      timelines[i].select();
+      timelines[i].timeline.select();
     }
     _super.select.call(this, e);
   };

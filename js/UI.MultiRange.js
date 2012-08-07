@@ -57,7 +57,7 @@ UI.MultiRange = (function() {
 
       child.value = child._value;
     }
-  };
+  }
 
   return MultiRange;
 

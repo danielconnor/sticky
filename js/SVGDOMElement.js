@@ -22,7 +22,7 @@ var SVGDOMElement = (function() {
     else {
       ref = element.id;
     }
-    this.setAttr(xlinkNamespace, "href", "#" + ref);
+    this.setAttr(xlinkNamespace, "xlink:href", "#" + ref);
   };
 
   return SVGDOMElement;

@@ -14,7 +14,7 @@ var Voodoo = (function() {
 
     this.obj.addEventListener("change", this.update.bind(this));
 
-    this.addEventListener("mousedown", this.mousedown.bind(this), false);
+    this.addEventListener("mousedown", this.mousedown.bind(this), true);
     this.addEventListener("dragstart", this.dragstart.bind(this), false);
     this.addEventListener("selectstart", this.selectstart.bind(this), false);
 
@@ -64,12 +64,12 @@ var Voodoo = (function() {
     e.stopPropagation();
     return false;
   };
+  
   _proto.mousedown = function(e) {
     this.offset = new Point(e.pageX - this.left, e.pageY - this.top);
     document.addEventListener("mousemove", this.mousemove, false);
     e.stopPropagation();
   };
-
 
   _proto.mouseup = function(e) {
     document.removeEventListener("mousemove", this.mousemove);

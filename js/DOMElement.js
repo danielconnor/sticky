@@ -10,6 +10,7 @@ var DOMElement = (function() {
     this.children = [];
 
     this.element = document.createElementNS(ns, tagName || "div");
+    this.style = this.element.style;
     this.element._domElement = this;
   }
 
@@ -19,19 +20,26 @@ var DOMElement = (function() {
     _super = EventEmitter.prototype;
 
   _proto.append = function(element) {
-    this.children.push(element);
-    this.element.appendChild(element.element);
-    return element;
-  };
-  _proto.prepend = function(element) {
-    var firstChild = this.element.firstsChild;
-    if(firstChild) {
-      this.children.unshift(element);
-      element.element.insertBefore(firstChild);
+    if(arguments.length > 1) {
+      for(var i = 0, il = arguments.length; i < il; i++) {
+        this.append(arguments[i]);
+      }
+    }
+    else if(element instanceof DOMElement) {
+      this.children.push(element);
+      this.element.appendChild(element.element);
+      return element;
+    }
+    else if(typeof element === "string") {
+      this.element.appendChild(document.createTextNode(element));
     }
     else {
-      this.append(element);
+      this.element.appendChild(element);
     }
+  };
+  _proto.prepend = function(element) {
+    this.children.unshift(element);
+    this.element.insertBefore(element.element, this.element.firstsChild);
   };
 
   _proto.hide = function() {
@@ -148,6 +156,24 @@ var DOMElement = (function() {
         return el.outerHTML;
       }
     }
+  });
+
+  Object.defineProperty(_proto, "innerHTML", {
+      get: function() {
+        return this.element.innerHTML;
+      },
+      set: function(html) {
+        this.element.innerHTML = html;
+      }
+  });
+
+  Object.defineProperty(_proto, "textContent", {
+      get: function() {
+        return this.element.textContent;
+      },
+      set: function(text) {
+        this.element.textContent = text;
+      }
   });
 
   return DOMElement;

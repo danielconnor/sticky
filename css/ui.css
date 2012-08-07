@@ -1,5 +1,4 @@
 .control {
-  display:block;
   font-family: Arial, Arial, Helvetica, sans-serif 
 }
 
@@ -10,19 +9,25 @@
   width: 100%;
 }
 
+.control.screen-container {
+  background-color: #fff;
+/*  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  box-shadow: 0 0 10px;*/
+}
 
 .hidden {
   display:none;
 }
 
 
-.control.range-control {
+.range-control {
   position: relative;
-  width: 500px;
   height: 5px;
   background-color: #aaa;
 }
-.control.range-slider-control {
+.range-slider-control {
   position: absolute;
   height: 10px;
   width: 10px;
@@ -32,8 +37,8 @@
   margin-top: -5px;
   margin-left: -5px;
 }
-.control.single.range-control.display-value:active .control.range-slider-control:before,
-.control.range-control.display-value .control.range-slider-control:active:before {
+.single.range-control.display-value:active .range-slider-control:before,
+.range-control.display-value .range-slider-control:active:before {
   content: attr(value);
   position: absolute;
   display: inline-block;
@@ -48,8 +53,8 @@
   background-color: black;
   z-index: 1000;
 }
-.control.single.range-control.display-value:active .control.range-slider-control:after,
-.control.range-control.display-value .control.range-slider-control:active:after {
+.single.range-control.display-value:active .range-slider-control:after,
+.range-control.display-value .range-slider-control:active:after {
   content: "";
   position: absolute;
   border: 5px solid transparent;
@@ -62,32 +67,42 @@
   bottom: 100%;
   z-index: 1000;
 }
-.control.timeline {
+.timeline-parent {
+  display: inline-block;
   width: 100%;
   height: 20px;
-  background-color: #fff;
-  margin: 1px 0;
+  font-size: 0.8em;
 }
-.control.keyframe {
+.timeline-parent .info {
+  float: left;
+}
+.timeline-parent .timeline {
+  margin: 7px 1px 7px 200px;
+}
+.timeline {
+  display: block;
+}
+.keyframe {
   height: 18px;
   border-radius: 2px;
   margin-top: -9px;
 }
-.control.keyframe.active {
+.keyframe.active {
   background-color: #4B7E92;
 }
-.control.progress {
+.progress {
   height: 15px;
-  width: 100%;
+  margin-left: 200px;
+  margin-right: 1px;
 }
-.control.progress .control.range-slider-control{
+.progress .range-slider-control{
   border-radius: 0;
   border-top-right-radius: 2px;
   border-top-left-radius: 2px;
   height: 10px;
   margin-top: -7px;
 }
-.control.progress .control.range-slider-control::after {
+.progress .range-slider-control::after {
   content: "";
   width: 0;
   height: 0;
@@ -98,14 +113,14 @@
   top: 100%;
 }
 
-.control.window {
+.window {
   position: absolute;
   bottom: 0;
   left: 0;
   display: inline-block;
 }
 
-.control.window .control.titlebar {
+.window .titlebar {
   position: relative;
   left: 0;
   right: 0;
@@ -116,13 +131,13 @@
   padding: 0 10px;
   cursor: move;
 }
-.control.window .control.contents {
+.window .contents {
   background-color: #fff;
   display: inline-block;
   width: 100%;
 }
 
-.control.popout {
+.popout {
   position: absolute;
   left: 0;
   top: 0;
@@ -132,46 +147,137 @@
   -webkit-transition: margin-left 0.3s ease-in-out;
   background-color: #fff;
 }
-.control.popout.popped {
+.popout.popped {
   margin-left: 0;
 }
 
-.control.popout .tab {
+.popout .tab {
   position: absolute;
   width: 20px;
   min-height: 200px;
   left: 100%;
-  top: 20px;
+  top: 60px;
   display: block;
   -webkit-transform-origin: 0 100%;
   /*-webkit-transform: rotate(90deg);*/
   background-color: #000;
 }
 
-.control.dropzone {
+.dropzone {
   border: 2px dashed #000;
   width: 180px;
   height: 180px;
   margin: 10px;
 }
-.control.dropzone.dragging {
+.dropzone.dragging {
   background-color: #ccc;
 }
 
-.control.prompt {
+.prompt {
   position: absolute;
   display: block;
   width: 200px;
   height: 200px;
   left: 50%;
   top: 50%;
+  margin-top: 100px;
   margin-left: -100px;
-  box-shadow: 1px 1px 2px #000;
-  background-color: #eee;
+  background-color: #fff;
   -webkit-transition: -webkit-transform 0.5s ease-in-out;
   -webkit-transform: scale(0);
 }
 
-.control.prompt.open {
+.prompt.open {
   -webkit-transform: scale(1);
+}
+
+.number-display {
+  cursor: n-resize;
+  display: inline-block;
+}
+.number-display.percent:after {
+  content: "%"
+}
+.number-display.degrees:after {
+  content: "°"
+}
+.number-display.pixels:after {
+  content: "px"
+}
+
+.sidebar {
+  position: absolute;
+  display: inline-block;
+  width: 100%;
+  right: 0;
+  top: 0;
+  box-sizing: border-box;
+  background-color: #fff;
+  font-size: 0.85em;
+  padding: 0.2em;
+  box-shadow: 1px 0 2px rgba(0,0,0,0.5)
+}
+.sidebar .control {
+  float: left;
+}
+
+.block,
+button {
+  display: inline-block;
+  border: 1px solid #cdcdcd;
+  border-radius: 3px;
+  background-color: #f5f5f5;
+  min-width: 22px;
+  text-align: center;
+  padding: 0.2em 0.3em;
+}
+button:hover {
+  border-color: #ababab;
+}
+button:active {
+  background-color: #e2e2e2;
+}
+/*
+  .attach-*
+  
+  For buttons that are grouped, remove the border-radius
+  from the side that touches the next element
+*/
+.attach-bottom {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.attach-top {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.attach-left {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.attach-right {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.scale .block,
+.scale button {
+  float: left;
+}
+.scale .block {
+  margin: 2px 0;
+  border-left: none;
+  border-right: none;
+  padding-left: 0;
+  padding-right: 0;
+  width: 3em;
+}
+.scale button:first-child {
+  margin-right: 0;
+}
+.scale button:last-child {
+  margin-left: 0;
+}
+[contenteditable] {
+  outline: none;
+  background-color: rgba(0,0,0,0.2);
 }

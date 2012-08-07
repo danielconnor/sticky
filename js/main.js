@@ -8,7 +8,6 @@
     resources = new UI.Resources(),
     prompt = new UI.Prompt("open");
 
-
   window.addEventListener("resize", function() {
     WIDTH = window.innerWidth;
     HEIGHT = window.innerHeight;
@@ -24,7 +23,7 @@
 
   storyboard.addObject(new Objects.C.Skeleton(new Point(200,200)));
 
-  window.prompt = prompt;
+  window.p = prompt;
   window.st = storyboard;
 })();
 

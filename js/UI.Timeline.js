@@ -43,7 +43,7 @@ UI.Timeline = (function() {
 
     this.animatable.addEventListener("clone", this.compile.bind(this));
 
-    animatable.addEventListener(property + "change", function(e) {
+    this.animatable.addEventListener(property + "change", function(e) {
       if(timeline.active) {
         timeline.active._prop = this[timeline.property];
         
@@ -93,6 +93,15 @@ UI.Timeline = (function() {
 
         this.emit("currentchange", current);
       }
+    }
+  });
+
+  Object.defineProperty(_proto, "prop", {
+    set: function() {
+
+    },
+    get: function() {
+      return this.animatable[this.property];
     }
   });
 

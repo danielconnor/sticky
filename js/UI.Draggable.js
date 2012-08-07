@@ -50,6 +50,7 @@ UI.Draggable = (function() {
     this.offset.y = e.pageY - this.top;
     document.addEventListener("mousemove", this.mousemove, false);
     document.addEventListener("mouseup", this.mouseup, false);
+    this.emit("dragstart", e);
   };
 
   _proto.mouseup = function(e) {

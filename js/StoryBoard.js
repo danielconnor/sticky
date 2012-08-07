@@ -1,4 +1,4 @@
-/*global util, UI, SVGDOMElement, Blob, webkitURL*/
+/*global util, UI, SVGDOMElement, SVGContainer, Blob, webkitURL*/
 var StoryBoard = (function() {
   "use strict";
 
@@ -7,13 +7,23 @@ var StoryBoard = (function() {
     var storyboard = this;
 
     this.objects = [];
-    this.screenContainer = new UI.Control("div");
-    this.screen = new SVGDOMElement("svg");
-    this.updateDimensions(width, height);
-    
+    this.screenContainer = new UI.Control("div",["screen-container"]);
+    this.screen = new SVGContainer(width, height);
+    this.screen.title = "hello world";
     this.screenContainer.append(this.screen);
 
     this.append(this.screenContainer);
+
+    this.sidebar = new UI.Control("div", "sidebar");
+    this.scale = new UI.Scale();
+    this.compileBtn = new UI.Control("button");
+    this.compileBtn.element.textContent = "preview";
+    this.compileBtn.addEventListener("click", this.preview.bind(this), false);
+
+    this.sidebar.append(this.scale);
+    this.sidebar.append(this.compileBtn);
+
+    this.append(this.sidebar);
 
     this.controls = new UI.Window("Controls");
     this.controls.element.id = "controls";

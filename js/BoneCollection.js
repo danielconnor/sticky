@@ -7,9 +7,7 @@ var BoneCollection = (function() {
 
     // where child bones should be attached
     this.staticEndpoint = new Point(0,0);
-
-    // this.addEventListener("click", this.click.bind(this), false);
-
+    
     this.bones = [];
   }
   util.inherits(BoneCollection, AnimatableObject);

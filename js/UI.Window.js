@@ -8,7 +8,7 @@ UI.Window = (function() {
 
     this.titleBar = new UI.TitleBar(title);
     // this.titleBar.addEventListener("drag", this.drag.bind(this), false);
-    _super.append.call(this, this.titleBar);
+    // _super.append.call(this, this.titleBar);
 
     this.contents = new UI.Control("div", ["contents"]);
     _super.append.call(this, this.contents);

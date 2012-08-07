@@ -5,6 +5,8 @@ body, html {
   margin: 0;
   overflow: hidden;
   position: relative;
+  background-color: #aaa;
+  font-size: 100%;
 }
 
 svg {

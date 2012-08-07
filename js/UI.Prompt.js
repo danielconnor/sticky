@@ -4,12 +4,15 @@ UI.Prompt = (function() {
 
   function Prompt(openClass, closedClass) {
     UI.Control.call(this, "div", ["prompt"]);
+
+    var self = this;
+
     this.openClass = openClass;
     this.closedClass = closedClass || "prompt";
     this.classList.add(this.closedClass);
-    
-    var style = window.getComputedStyle(this.element);
-    this.animated = style ? !!style.webkitTransition : false;
+
+    var style = window.getComputedStyle(self.element);
+    self.animated = style ? !!style.webkitTransition : false;
   }
   util.inherits(Prompt, UI.Control);
 
@@ -23,15 +26,18 @@ UI.Prompt = (function() {
     var self = this;
     setTimeout(function() {
       self.classList.add(self.openClass);
-    }, 0);
+    }, 100);
+
+    document.addEventListener("click", this.close.bind(this), false);
   };
 
   _proto.close = function() {
+    this.classList.remove(this.openClass);
+    
     if(this.animated) {
-      this.once("webkitAnimationEnd", this.remove.bind(this), false);
-      this.classList.remove(this.openClass);
+      this.once("webkitAnimationEnd", this.removeSelf.bind(this), false);
     }
-    else this.remove();
+    else this.removeSelf();
   };
 
   return Prompt;

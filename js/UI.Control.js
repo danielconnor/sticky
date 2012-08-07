@@ -5,14 +5,14 @@ UI.Control = (function() {
   function Control(tagName, classes) {
     DOMElement.call(this, "http://www.w3.org/1999/xhtml", tagName);
 
-    this.children = [];
     this.classList = this.element.classList || new DOMTokenList(this.element);
-    this.style = this.element.style;
-
     this.measurement = "%";
 
     this.classList.add("control");
-    if(classes) {
+    if(typeof classes === "string") {
+      this.classList.add(classes);
+    }
+    else if(classes) {
       for(var i = 0, il = classes.length; i < il; i++) {
         this.classList.add(classes[i]);
       }
