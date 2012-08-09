@@ -5,7 +5,13 @@ UI.NumberDisplay = (function() {
 
   function NumberDisplay(value, classes) {
     UI.Draggable.call(this, "span", ["number-display"].concat(classes));
+
+    // setting textContent of a non-text node creates a new dom element each time
+    // so we create a textNode and change it's content
+    this.valueDisplay = document.createTextNode("");
     this.value = value || 0;
+
+    this.append(this.valueDisplay);
 
     this.addEventListener("dragstart", this.ondragstart.bind(this));
     this.addEventListener("dblclick", this.ondblclick.bind(this), false);
@@ -93,7 +99,7 @@ UI.NumberDisplay = (function() {
   _proto.setValue = function(value) {
     if(typeof value !== "number") return;
     this._value = value;
-    this.element.textContent = value.toFixed(0);
+    this.valueDisplay.textContent = value.toFixed(0);
   };
 
   Object.defineProperty(_proto, "editable", {

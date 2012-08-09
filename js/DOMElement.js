@@ -1,4 +1,4 @@
-/*global util, EventEmitter*/
+/*global util, EventEmitter, Node, Element*/
 var DOMElement = (function() {
   "use strict";
 

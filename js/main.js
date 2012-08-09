@@ -15,9 +15,6 @@
     storyboard.updateDimensions(WIDTH, HEIGHT);
   }, false);
 
-  document.addEventListener("selectstart", function(e) { e.preventDefault(); }, false);
-
-
   document.body.appendChild(storyboard.element);
   document.body.appendChild(resources.element);
 

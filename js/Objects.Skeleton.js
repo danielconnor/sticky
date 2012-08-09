@@ -1,10 +1,31 @@
-/*global util, Objects, BoneCollection*/
+/*global util, Objects, BoneCollection, Voodoo, UI, Point*/
 Objects.C.Skeleton = (function() {
   "use strict";
 
   function Skeleton(position, layout) {
     Objects.Composite.call(this, position, layout || Skeleton.layout);
+
+    var skeleton = this;
+
+    Skeleton.create(this.obj, Skeleton.layout, function(bone) {
+      skeleton.children.push(bone);
+      skeleton.voodoos.push(new Voodoo(bone));
+      skeleton.timelineCollection.append(new UI.Timeline(bone, "angle", 0, 1000));
+    });
+
+    this.obj.update();
   }
+
+  Skeleton.create = function(obj, layout, cb) {
+    if(!obj) {
+      cb = layout;
+      layout = obj;
+      obj = new BoneCollection("g", new Point(0,0));
+    }
+
+    obj.addBones(layout, cb);
+    return obj;
+  };
 
   util.inherits(Skeleton, Objects.Composite);
 

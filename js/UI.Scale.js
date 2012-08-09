@@ -14,7 +14,6 @@ UI.Scale = (function() {
     this.incButton.addEventListener("click", this.display.increment.bind(this.display), false);
     this.decButton.addEventListener("click", this.display.decrement.bind(this.display), false);
 
-
     this.append(this.decButton, this.display, this.incButton);
   }
 

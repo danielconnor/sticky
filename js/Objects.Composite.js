@@ -9,17 +9,6 @@ Objects.Composite = (function() {
     this.children = [];
     this.voodoos = [];
     this.timelines = this.timelineCollection.children;
-
-    var obj = this.obj;
-
-
-    obj.addBones(layout, function(bone) {
-      composite.children.push(bone);
-      composite.voodoos.push(new Voodoo(bone));
-      composite.timelineCollection.append(new UI.Timeline(bone, "angle", 0, 1000));
-    });
-    obj.update();
-
   }
 
   util.inherits(Composite, Objects.Basic);

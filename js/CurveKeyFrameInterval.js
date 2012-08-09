@@ -78,11 +78,11 @@ var CurveKeyFrameInterval = (function() {
     nO.y = next.y - nC.y;
 
     this.update();
-    this.emit("change");
+    // this.emit("change");
   };
 
   _proto.update = function() {
-      var prev = this.prev._prop,
+    var prev = this.prev._prop,
       next = this.next._prop,
       pO = this.prevOffset,
       nO = this.nextOffset,

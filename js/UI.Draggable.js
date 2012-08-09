@@ -12,13 +12,11 @@ UI.Draggable = (function() {
 
     this.dragged = false;
 
-
     this.mousemove = this.mousemove.bind(this);
     this.mouseup = this.mouseup.bind(this);
 
     this.addEventListener("mousedown", this.mousedown.bind(this), false);
     this.addEventListener("dragstart", this.dragstart.bind(this), false);
-    this.addEventListener("selectstart", this.selectstart.bind(this), false);
     this.addEventListener("click", this.click.bind(this), false);
   }
 
@@ -66,8 +64,7 @@ UI.Draggable = (function() {
     this.dragged = false;
   };
 
-  _proto.dragstart =
-  _proto.selectstart = function(e) {
+  _proto.dragstart = function(e) {
     e.stopPropagation();
     e.preventDefault();
     return false;

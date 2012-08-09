@@ -74,3 +74,37 @@ window.DOMTokenList = window.DOMTokenList || (function() {
   }
 })();
 
+(function() {
+  var _proto = Element.prototype;
+
+  _proto.matchesSelector =
+    _proto.matchesSelector ||
+    _proto.mozMatchesSelector ||
+    _proto.webkitMatchesSelector ||
+    _proto.oMatchesSelector ||
+    _proto.msMatchesSelector;
+
+})();
+
+(function() {
+ 
+  window.getMatchedCSSRules = window.getMatchedCSSRules || function(element) {
+    var sheetList = document.styleSheets,
+      i = sheetList.length,
+      matches = [];
+
+    while (i--) {
+      var ruleList = sheetList[i].cssRules,
+        j = ruleList.length;
+
+      while(j--) {
+        if (ruleList[j].type == CSSRule.STYLE_RULE && element.matchesSelector(ruleList[j].selectorText)) {
+          matches.push(ruleList[j].style);
+        }
+      }
+    }
+    return matches.length ? matches : null;
+  };
+
+
+})();

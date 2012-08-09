@@ -16,7 +16,6 @@ var Voodoo = (function() {
 
     this.addEventListener("mousedown", this.mousedown.bind(this), true);
     this.addEventListener("dragstart", this.dragstart.bind(this), false);
-    this.addEventListener("selectstart", this.selectstart.bind(this), false);
 
     this.mousemove = this.mousemove.bind(this);
 
@@ -56,8 +55,6 @@ var Voodoo = (function() {
   });
 
   _proto.mousemove = function(e) {
-    this.emit("drag", this, e);
-
     this.obj.setPosition(e.pageX, e.pageY);
 
     e.preventDefault();
@@ -76,8 +73,7 @@ var Voodoo = (function() {
   };
 
 
-  _proto.dragstart =
-  _proto.selectstart = function(e) {
+  _proto.dragstart = function(e) {
     e.stopPropagation();
     e.preventDefault();
     return false;

@@ -6,7 +6,7 @@ var SVGDOMElement = (function() {
     svgNamespace = "http://www.w3.org/2000/svg";
 
   function SVGDOMElement(tagName) {
-    DOMElement.call(this, svgNamespace, tagName);
+    DOMElement.call(this, svgNamespace, tagName || "g");
   }
 
   util.inherits(SVGDOMElement, DOMElement);
