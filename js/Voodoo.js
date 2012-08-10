@@ -12,7 +12,7 @@ var Voodoo = (function() {
     this.parent = parent;
     this.offset = null;
 
-    this.obj.addEventListener("change", this.update.bind(this));
+
 
     this.addEventListener("mousedown", this.mousedown.bind(this), true);
     this.addEventListener("dragstart", this.dragstart.bind(this), false);
@@ -23,7 +23,13 @@ var Voodoo = (function() {
 
     this.setAttr("stroke", "#000");
 
-    this.update();
+    if(this.obj.staticEndpoint) {
+      this.obj.append(this);
+      this.setPosition(this.obj.staticEndpoint);
+    }
+    else {
+      this.obj.addEventListener("changeposition", this.setPosition.bind(this));
+    }
   }
 
   util.inherits(Voodoo, SVGDOMElement);
@@ -31,10 +37,16 @@ var Voodoo = (function() {
   var _proto = Voodoo.prototype,
     _super = SVGDOMElement.prototype;
 
-  _proto.update = function() {
-    var pos = this.obj._position;
-    this.element.setAttribute("cx",pos.x);
-    this.element.setAttribute("cy",pos.y);
+  _proto.setPosition = function(point, y) {
+    var x;
+    if(y === undefined) {
+      x = point.x;
+      y = point.y;
+    }
+    else x = point;
+
+    this.element.setAttribute("cx", x);
+    this.element.setAttribute("cy", y);
   };
 
   Object.defineProperty(_proto, "size", {

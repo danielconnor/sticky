@@ -22,7 +22,7 @@ svg {
 #screen {
   height: 70%;
 }
-* {
+*:not(input) {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -33,8 +33,8 @@ svg {
 ::-webkit-scrollbar { 
   width:9px;
   height:9px;
-} 
-::-webkit-scrollbar-button:start:decrement, 
+}
+::-webkit-scrollbar-button:start:decrement,
 ::-webkit-scrollbar-button:end:increment { 
   display:block; 
   height:0; 

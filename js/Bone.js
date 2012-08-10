@@ -67,7 +67,6 @@ var Bone = (function() {
   });
 
   _proto.updateTransform = function() {
-    this.setAttr("transform", "rotate(" + this.angle + "," + this.parent.staticEndpoint + ")");
   };
 
   _proto.update = function() {
@@ -79,8 +78,8 @@ var Bone = (function() {
     pos.x = len * Math.cos(radians) + parentPos.x;
     pos.y = len * Math.sin(radians) + parentPos.y;
 
-    _super.update.call(this);
-
+    this.setAttr("transform", "rotate(" + this.angle + "," + this.parent.staticEndpoint + ")");
+    
     this.emit("change");
   };
 

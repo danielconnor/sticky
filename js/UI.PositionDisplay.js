@@ -26,8 +26,8 @@ UI.PositionDisplay = (function() {
     _super = UI.Draggable.prototype;
 
   _proto.onchange = function() {
-    this._value.x = this.xValue._value;
-    this._value.y = this.yValue._value;
+    this._value.x = this.xValue.value;
+    this._value.y = this.yValue.value;
 
     this.emit("change", this._value);
   };

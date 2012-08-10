@@ -37,17 +37,8 @@ var BoneCollection = (function() {
     return bone;
   };
 
-
-  _proto.updateTransform = function() {
-    this.setAttr("transform", "translate(" + this._position + ")");
-  };
-
   _proto.update = function() {
-    this.updateTransform();
-
-    for(var i = 0, b = this.bones, il = b.length; i < il; i++) {
-      b[i].update();
-    }
+    this.setAttr("transform", "translate(" + this._position + ")");
   };
 
   _proto.setPosition = function(x, y) {

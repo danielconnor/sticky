@@ -98,13 +98,34 @@ window.DOMTokenList = window.DOMTokenList || (function() {
         j = ruleList.length;
 
       while(j--) {
-        if (ruleList[j].type == CSSRule.STYLE_RULE && element.matchesSelector(ruleList[j].selectorText)) {
+        if (ruleList[j].type == CSSRule.STYLE_RULE &&
+            element.matchesSelector(ruleList[j].selectorText)) {
+
           matches.push(ruleList[j].style);
+        
         }
       }
     }
     return matches.length ? matches : null;
   };
 
+})();
+
+(function() {
+
+  var input = document.createElement("input");
+
+  if(input.valueAsNumber === undefined) {
+    Object.defineProperty(HTMLInputElement.prototype, "valueAsNumber", {
+      get: function() {
+        return parseInt(this.value, 10);
+      },
+      set: function(val) {
+        this.value = parseInt(val, 10);
+      }
+    });
+  }
+
+  input = null;
 
 })();

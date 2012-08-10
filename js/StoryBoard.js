@@ -81,12 +81,12 @@ var StoryBoard = (function() {
     });
 
     this.screen.append(obj.obj);
-    this.screen.append(obj.voodoo);
+    // this.screen.append(obj.voodoo);
     var voodoos = obj.voodoos;
 
-    for(var i = 0; i < voodoos.length; i++) {
-      this.screen.append(voodoos[i]);
-    }
+    // for(var i = 0; i < voodoos.length; i++) {
+    //   this.screen.append(voodoos[i]);
+    // }
 
     this.keyFrames.append(obj.timelineCollection);
   };
